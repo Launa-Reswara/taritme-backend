@@ -1,10 +1,10 @@
-const express = require("express");
-const compression = require("compression");
-const morgan = require("morgan");
-const logger = require("./src/utils/logger");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+import logger from "./src/lib/utils/logger.js";
+import bodyParser from "body-parser";
+import compression from "compression";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import morgan from "morgan";
 
 dotenv.config();
 const app = express();
