@@ -10,16 +10,24 @@ dotenv.config();
 const app = express();
 
 async function main() {
+  // Start logging using morgan and winston logger
+  const morganFormat =
+    ":method :url :status :res[content-length] - :response-time ms";
+  app.use(
+    morgan(morganFormat, {
+      stream: {
+        write: (text) => {
+          logger.info(text);
+        },
+      },
+    })
+  );
+
   app.use(cors());
   app.options("*", cors());
 
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-
-  // Start logging using morgan and winston logger
-  const morganFormat =
-    ":method :url :status :res[content-length] - :response-time ms";
-  app.use(morgan(morganFormat, { stream: logger.stream }));
 
   /**
    * Optimization technique using compression
