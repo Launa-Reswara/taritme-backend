@@ -1,3 +1,4 @@
+import { rootHandler } from "./src/handlers/root.js";
 import logger from "./src/lib/utils/logger.js";
 import bodyParser from "body-parser";
 import compression from "compression";
@@ -35,9 +36,7 @@ async function main() {
    */
   app.use(compression());
 
-  app.get("/", (req, res) => {
-    res.send("Halo dari Express!");
-  });
+  app.get("/", rootHandler);
 
   app.listen(process.env.PORT, () => {
     console.log(`Server sudah jalan di port ${process.env.PORT}`);
