@@ -9,6 +9,11 @@ export async function rootHandler(req, res) {
         endpoints: {
           "/api/auth/login": "Login",
           "/api/auth/registration": "Regist account",
+          "/api/arsip-kesenian": "",
+          "/api/daftar-pelatih": "",
+          "/api/admin": "Admin side",
+          "/api/admin/arsip": "CRUD arsip",
+          "/api/admin/pelatih": "CRUD pelatih",
         },
       });
     } else {
@@ -18,6 +23,7 @@ export async function rootHandler(req, res) {
       });
     }
   } catch (err) {
+    res.status(500);
     res.send({ status: 500, message: err.message });
   }
 }

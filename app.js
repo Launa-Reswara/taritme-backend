@@ -1,5 +1,5 @@
-import { rootHandler } from "./src/handlers/root.js";
 import logger from "./src/lib/utils/logger.js";
+import routes from "./src/routes/index.js";
 import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
@@ -36,7 +36,8 @@ async function main() {
    */
   app.use(compression());
 
-  app.get("/", rootHandler);
+  // routes
+  app.use(routes);
 
   app.listen(process.env.PORT, () => {
     console.log(`Server sudah jalan di port ${process.env.PORT}`);
