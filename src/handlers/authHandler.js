@@ -1,14 +1,6 @@
 import { connection } from "../lib/utils/connection.js";
 import { encode } from "../lib/utils/jwt.js";
 
-/**
- * Structure for users
- *
- * id: integer not null
- * name: text(100)
- * email: text(100) not null
- * password: text(100) not null
- */
 export async function loginHandler(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
@@ -22,15 +14,19 @@ export async function loginHandler(req, res) {
         password: req.body.password,
       };
 
+      const [results] = await connection.query(
+        `SELECT * FROM users WHERE email = '${payload.email}' AND password = '${payload.password}'`
+      );
+
       // JWT token
       const newToken = encode(payload);
 
-      if (payload.email === "halo@ekel.dev" && payload.password === "ekel123") {
+      if (results.length) {
         res.status(200);
         res.send({
           statusCode: res.statusCode,
           message: "Login berhasil!",
-          data: payload,
+          data: results[0],
           token: newToken,
         });
       } else {
@@ -51,10 +47,8 @@ export async function loginHandler(req, res) {
 
 async function checkUser(payload) {
   // WIP: insert to DB
-  const [results] = await connection().then((res) =>
-    res.query(
-      `SELECT * FROM users WHERE email = '${payload.username}' AND password = '${payload.password}'`
-    )
+  const [results] = await connection.query(
+    `SELECT * FROM users WHERE email = '${payload.email}' AND password = '${payload.password}'`
   );
 
   if (results.length) return true;
@@ -69,10 +63,20 @@ export async function registrationHandler(req, res) {
       password: req.body.password,
     };
 
+    const [results] = await connection.query(
+      `SELECT * FROM users WHERE email = '${payload.email}' `
+    );
+
     if (!payload.name || !payload.email || !payload.password) {
       res.send({
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
+      });
+    } else if (results.length) {
+      res.send({
+        statusCode: 401,
+        message:
+          "Registrasi akun gagal, Email yang dimasukkan telah dipakai oleh akun lain!",
       });
     } else {
       const [results] = await connection.query(
@@ -93,7 +97,6 @@ export async function registrationHandler(req, res) {
       }
     }
   } catch (err) {
-    // res.status(req.statusCode);
     res.send({ statusCode: 500, message: err.message });
   }
 }
