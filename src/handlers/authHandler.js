@@ -1,10 +1,11 @@
 import { connection } from "../lib/utils/connection.js";
-import { encode } from "../lib/utils/jwt.js";
+import { encode, verify } from "../lib/utils/jwt.js";
+import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
 export async function loginHandler(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.send({
+      res.json({
         statusCode: 401,
         message: "Login gagal, data tidak lengkap!",
       });
@@ -15,44 +16,37 @@ export async function loginHandler(req, res) {
       };
 
       const [results] = await connection.query(
-        `SELECT * FROM users WHERE email = '${payload.email}' AND password = '${payload.password}'`
+        `SELECT * FROM users WHERE email = '${payload.email}'`
       );
 
       // JWT token
       const newToken = encode(payload);
 
-      if (results.length) {
-        res.status(200);
-        res.send({
+      const isTruePassword = checkPassword(
+        payload.password,
+        results[0].password
+      );
+
+      if (results.length && isTruePassword) {
+        res.status(200).json({
           statusCode: res.statusCode,
           message: "Login berhasil!",
           data: results[0],
           token: newToken,
         });
       } else {
-        res.send({
+        res.json({
           statusCode: 401,
           message: "Login gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.status(500);
-    res.send({
+    res.json({
       status: 500,
-      message: err.message,
+      message: "Login gagal!",
     });
   }
-}
-
-async function checkUser(payload) {
-  // WIP: insert to DB
-  const [results] = await connection.query(
-    `SELECT * FROM users WHERE email = '${payload.email}' AND password = '${payload.password}'`
-  );
-
-  if (results.length) return true;
-  else return false;
 }
 
 export async function registrationHandler(req, res) {
@@ -68,45 +62,50 @@ export async function registrationHandler(req, res) {
     );
 
     if (!payload.name || !payload.email || !payload.password) {
-      res.send({
+      res.json({
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
       });
     } else if (results.length) {
-      res.send({
+      res.json({
         statusCode: 401,
         message:
           "Registrasi akun gagal, Email yang dimasukkan telah dipakai oleh akun lain!",
       });
     } else {
       const [results] = await connection.query(
-        `INSERT INTO users (name, email, password) VALUES ('${payload.name}', '${payload.email}', '${payload.password}')`
+        `INSERT INTO users (name, email, password) VALUES ('${
+          payload.name
+        }', '${payload.email}', '${hashPassword(payload.password)}')`
       );
 
       if (results) {
         res.status(200);
-        res.send({
+        res.json({
           statusCode: 200,
           message: "Registrasi akun berhasil!",
         });
       } else {
-        res.send({
+        res.json({
           statusCode: 400,
           message: "Registrasi akun gagal, silahkan coba lagi!",
         });
       }
     }
   } catch (err) {
-    res.send({ statusCode: 500, message: err.message });
+    res.json({
+      statusCode: 500,
+      message: "Registrasi akun gagal, silahkan coba lagi!",
+    });
   }
 }
 
 export async function adminHandler(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.send({
+      res.json({
         statusCode: 401,
-        message: "Login gagal, data tidak lengkap!",
+        message: "Login sebagai admin gagal, data tidak lengkap!",
       });
     } else {
       const payload = {
@@ -114,24 +113,26 @@ export async function adminHandler(req, res) {
         password: req.body.password,
       };
 
+      // JWT token
+      const newToken = encode(payload);
+
       if (
         payload.email === process.env.ADMIN_EMAIL &&
         payload.password === process.env.ADMIN_PASSWORD
       ) {
-        res.status(200);
-        res.send({
+        res.status(200).json({
           statusCode: 200,
           message: "Login berhasil!",
+          token: newToken,
         });
       } else {
-        res.send({
+        res.json({
           statusCode: 401,
-          message: "Login gagal, data yang dimasukkan salah!",
+          message: "Login sebagai admin gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.status(500);
-    res.send({ statusCode: 500, message: err.message });
+    res.json({ statusCode: 500, message: "Login sebagai admin gagal!" });
   }
 }

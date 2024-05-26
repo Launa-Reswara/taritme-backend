@@ -10,12 +10,22 @@ WIP(Work In Progress)
 ## Documentation of API
 
 `/api/auth/login`
+
+`/api/auth/login/admin`
+
 `/api/auth/registration`
-`/api/instruktur-tari`
+
+`/api/pelatih-tari`
+
+`/api/komunitas`
+
+`/api/arsip-kesenian`
+
+`/api/pelatih-tari/payment`
 
 ## Getting Started
 
 - Clone repo ini.
 - Masuk ke folder project, kemudian ketikkan `npm install` untuk menginstall semua dependencies yang diperlukan.
-- Setelah itu, ketik `npm run dev` untuk menjalankan project. Backend akan diserve di http://localhost:5000
+- Setelah itu, ketik `npm run dev` untuk menjalankan project. Backend akan diserve di http://localhost:5000 .
 - Jika ingin mengetes project ini dengan Docker, silahkan pastikan Docker telah terinstall, dan ketik `docker compose up --build`.

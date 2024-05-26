@@ -12,5 +12,14 @@ export function decode(token) {
 }
 
 export function verify(token) {
-  return jwt.verify(token, process.env.JWT_SECRET, { algorithms: ["HS256"] });
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      res.status(403).json({ statusCode: 403, message: "Invalid token!" });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success!",
+      });
+    }
+  });
 }
