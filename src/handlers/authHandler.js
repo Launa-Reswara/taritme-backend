@@ -1,5 +1,5 @@
 import { connection } from "../lib/utils/connection.js";
-import { encode, verify } from "../lib/utils/jwt.js";
+import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
 export async function loginHandler(req, res) {

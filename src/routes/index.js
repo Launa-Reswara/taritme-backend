@@ -12,9 +12,9 @@ const routes = express.Router();
 
 routes.get("/", rootHandler);
 routes.post("/api/auth/login", loginHandler);
-routes.post("/api/auth/registration", registrationHandler);
 routes.post("/api/auth/login/admin", adminHandler);
-routes.post("/api/transactions", transactionHandler);
+routes.post("/api/auth/registration", registrationHandler);
+routes.post("/api/pelatih-tari/transactions", transactionHandler);
 routes.get("/api/komunitas", komunitasHandler);
 
 export default routes;

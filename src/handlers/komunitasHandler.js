@@ -5,13 +5,18 @@ export async function komunitasHandler(_, res) {
     const [results] = await connection.query(`SELECT * FROM komunitas`);
 
     if (results.length) {
-      res.json({
+      res.status(200).json({
         statusCode: 200,
         message: "Success get all komunitas!",
         data: results,
       });
+    } else {
+      res.json({
+        statusCode: 404,
+        message: "Komunitas data is not found!",
+      });
     }
   } catch (err) {
-    res.status(500).json({ statusCode: 500, message: err.message });
+    res.json({ statusCode: 500, message: err.message });
   }
 }

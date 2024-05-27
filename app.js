@@ -14,6 +14,7 @@ async function main() {
   // Start logging using morgan and winston logger
   const morganFormat =
     ":method :url :status :res[content-length] - :response-time ms";
+
   app.use(
     morgan(morganFormat, {
       stream: {

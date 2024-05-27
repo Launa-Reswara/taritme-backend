@@ -6,5 +6,5 @@ export const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY;
 export const PENDING_PAYMENT = "PENDING_PAYMENT";
 export const PAID = "PAID";
 export const CANCELED = "CANCELED";
-export const FRONTEND_URL = process.env.FRONTEND_URL;
+export const FRONTEND_DEVELOPMENT_URL = process.env.FRONTEND_DEVELOPMENT_URL;
 export const MIDTRANS_APP_URL = process.env.MIDTRANS_APP_URL;
