@@ -17,11 +17,11 @@ WIP(Work In Progress)
 
 `/api/pelatih-tari`
 
+`/api/pelatih-tari/transactions`
+
 `/api/komunitas`
 
 `/api/arsip-kesenian`
-
-`/api/pelatih-tari/payment`
 
 ## Getting Started
 
