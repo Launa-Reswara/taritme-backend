@@ -1,8 +1,59 @@
+import { connection } from "../lib/utils/connection.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
+export async function pelatihTariHandler(_, res) {
+  try {
+    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
+
+    if (result.length) {
+      res.send({
+        statusCode: 200,
+        message: "Success get all pelatih tari!",
+        data: result,
+      });
+    } else {
+      res.send({
+        statusCode: 404,
+        message: "Data is not available!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to get data!",
+    });
+  }
+}
+
+export async function detailPelatihTariHandler() {
+  try {
+    const [result] = await connection.query(
+      `SELECT pelatih_tari.name, pelatih_tari.description, pelatih_tari.rating, pelatih_tari.price, pelati_tari.total_review, detail_pelatih_tari.tentang_pelatih,detail_pelatih_tari.image_1,detail_pelatih_tari.image_2,detail_pelatih_tari.image_3 FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id,`
+    );
+
+    if (result.length) {
+      res.send({
+        statusCode: 200,
+        message: "Success get detail pelatih tari!",
+        data: result,
+      });
+    } else {
+      res.send({
+        statusCode: 404,
+        message: "Data is not available!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to get data!",
+    });
+  }
+}
+
 // Midtrans payment
-export async function transactionHandler(req, res) {
+export async function transactionPelatihTariHandler(req, res) {
   try {
     const { customer_details, item_details } = req.body;
 

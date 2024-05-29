@@ -26,6 +26,6 @@ export async function rootHandler(_, res) {
       });
     }
   } catch (err) {
-    res.json({ status: 500, message: err.message });
+    res.json({ status: 400, message: err.message });
   }
 }

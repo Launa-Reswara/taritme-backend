@@ -2,6 +2,12 @@ import { connection } from "../lib/utils/connection.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
+/**
+ * - Controller => logic
+ * - Routes => routing
+ *
+ * Cookie => req.cookie
+ */
 export async function loginHandler(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
@@ -43,8 +49,9 @@ export async function loginHandler(req, res) {
     }
   } catch (err) {
     res.json({
-      status: 500,
+      status: 400,
       message: "Login gagal!",
+      cause: err.message,
     });
   }
 }
@@ -94,8 +101,10 @@ export async function registrationHandler(req, res) {
     }
   } catch (err) {
     res.json({
-      statusCode: 500,
+      statusCode: 400,
       message: "Registrasi akun gagal, silahkan coba lagi!",
+      // Note: kalo udah production, dihapus cause nya
+      cause: err.message,
     });
   }
 }
@@ -133,6 +142,10 @@ export async function adminHandler(req, res) {
       }
     }
   } catch (err) {
-    res.json({ statusCode: 500, message: "Login sebagai admin gagal!" });
+    res.json({
+      statusCode: 400,
+      message: "Login sebagai admin gagal!",
+      cause: err.message,
+    });
   }
 }
