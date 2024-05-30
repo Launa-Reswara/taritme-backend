@@ -26,10 +26,17 @@ export async function pelatihTariHandler(_, res) {
   }
 }
 
-export async function detailPelatihTariHandler() {
+export async function detailPelatihTariHandler(req, res) {
   try {
+    const name = req.params.name;
+
+    const normalizedName = name
+      .split("-")
+      .map((item) => item[0].toUpperCase() + item.substring(1))
+      .join(" ");
+
     const [result] = await connection.query(
-      `SELECT pelatih_tari.name, pelatih_tari.description, pelatih_tari.rating, pelatih_tari.price, pelati_tari.total_review, detail_pelatih_tari.tentang_pelatih,detail_pelatih_tari.image_1,detail_pelatih_tari.image_2,detail_pelatih_tari.image_3 FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id,`
+      `SELECT name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizedName}'`
     );
 
     if (result.length) {
@@ -69,6 +76,7 @@ export async function transactionPelatihTariHandler(req, res) {
     const snap = new midtransClient.Snap({
       isProduction: false,
       serverKey: process.env.MIDTRANS_SERVER_KEY,
+      clientKey: process.env.MIDTRANS_CLIENT_KEY,
     });
 
     /**
@@ -80,6 +88,7 @@ export async function transactionPelatihTariHandler(req, res) {
         order_id: transaction_id,
         gross_amount,
       },
+      item_details,
       credit_card: {
         secure: true,
       },
@@ -96,7 +105,6 @@ export async function transactionPelatihTariHandler(req, res) {
           city,
         },
       },
-      item_details,
       callbacks: {
         finish: `
         ${

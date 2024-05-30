@@ -131,7 +131,7 @@ export async function adminHandler(req, res) {
       ) {
         res.status(200).json({
           statusCode: 200,
-          message: "Login berhasil!",
+          message: "Login sebagai admin berhasil!",
           token: newToken,
         });
       } else {
