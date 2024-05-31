@@ -2,9 +2,12 @@ import { connection } from "../lib/utils/connection.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
-export async function pelatihTariHandler(_, res) {
+// TODO: delete, edit
+export async function getPelatihTari(_, res) {
   try {
-    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
+    const [result] = await connection.query(
+      `SELECT * FROM pelatih_tari LEFT JOIN data_pelatih_tari ON pelatih_tari.id = data_pelatih_tari.pelatih_tari_id`
+    );
 
     if (result.length) {
       res.send({
@@ -26,7 +29,35 @@ export async function pelatihTariHandler(_, res) {
   }
 }
 
-export async function detailPelatihTariHandler(req, res) {
+export async function deletePelatihTari(req, res) {
+  try {
+    const { email } = req.body;
+
+    const [result] = await connection.query(
+      `DELETE pelatih_tari, data_pelatih_tari FROM pelatih_tari LEFT JOIN data_pelatih_tari ON pelatih_tari.id = data_pelatih_tari.pelatih_tari_id WHERE data_pelatih_tari.email = '${email}'`
+    );
+
+    if (result.length) {
+      res.send({
+        statusCode: 200,
+        message: "Success get all pelatih tari!",
+        data: result,
+      });
+    } else {
+      res.send({
+        statusCode: 404,
+        message: "Data is not available!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to get data!",
+    });
+  }
+}
+
+export async function getDetailPelatihTari(req, res) {
   try {
     const name = req.params.name;
 
@@ -60,7 +91,7 @@ export async function detailPelatihTariHandler(req, res) {
 }
 
 // Midtrans payment
-export async function transactionPelatihTariHandler(req, res) {
+export async function transactionPelatihTari(req, res) {
   try {
     const { customer_details, item_details } = req.body;
 
@@ -129,3 +160,17 @@ export async function transactionPelatihTariHandler(req, res) {
     res.json({ statusCode: 400, message: "Failed to create transaction!" });
   }
 }
+
+/*export async function userPaymentPelatihTariHandler(req, res) {
+  try {
+    const { email } = req.body;
+    const [result] = await connection.query(
+      `SELECT * FROM user_payment_pelatih_tari`
+    );
+
+    if (result.length) {
+    }
+  } catch (err) {
+    res.json({ statusCode: 400, message: "Failed!" });
+  }
+}*/

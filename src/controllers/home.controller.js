@@ -1,4 +1,4 @@
-export async function rootHandler(_, res) {
+export async function getHome(_, res) {
   try {
     if (res.statusCode === 200) {
       res.send({

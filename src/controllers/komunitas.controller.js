@@ -1,6 +1,6 @@
 import { connection } from "../lib/utils/connection.js";
 
-export async function komunitasHandler(_, res) {
+export async function getKomunitas(_, res) {
   try {
     const [results] = await connection.query(`SELECT * FROM komunitas`);
 

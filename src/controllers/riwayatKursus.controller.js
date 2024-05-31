@@ -1,6 +1,6 @@
 import { connection } from "../lib/utils/connection.js";
 
-export async function RiwayatKursusHandler(req, res) {
+export async function getRiwayatKursus(req, res) {
   try {
     const [results] = await connection.query(`SELECT * FROM riwayat_kursus`);
 
@@ -10,12 +10,16 @@ export async function RiwayatKursusHandler(req, res) {
         message: "Berhasil mendapatkan riwayat kurus!",
         data: results,
       });
-      return results;
     } else {
       res.send({
         statusCode: 404,
         message: "Data tidak diemukan!",
       });
     }
-  } catch (err) {}
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to get riwayat kursus!",
+    });
+  }
 }

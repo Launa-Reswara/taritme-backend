@@ -2,13 +2,7 @@ import { connection } from "../lib/utils/connection.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
-/**
- * - Controller => logic
- * - Routes => routing
- *
- * Cookie => req.cookie
- */
-export async function loginHandler(req, res) {
+export async function loginUserAccount(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
       res.json({
@@ -56,7 +50,7 @@ export async function loginHandler(req, res) {
   }
 }
 
-export async function registrationHandler(req, res) {
+export async function registrationUserAccount(req, res) {
   try {
     const payload = {
       name: req.body.name,
@@ -109,7 +103,7 @@ export async function registrationHandler(req, res) {
   }
 }
 
-export async function adminHandler(req, res) {
+export async function loginAdmin(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
       res.json({

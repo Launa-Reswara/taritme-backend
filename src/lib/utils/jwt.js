@@ -11,7 +11,7 @@ export function decode(token) {
   return jwt.decode(token, process.env.JWT_SECRET);
 }
 
-export function verify(token) {
+/*export function verify(token) {
   jwt.verify(token, process.env.JWT_SECRET, (err) => {
     if (err) {
       res.status(403).json({ statusCode: 403, message: "Invalid token!" });
@@ -23,3 +23,4 @@ export function verify(token) {
     }
   });
 }
+*/

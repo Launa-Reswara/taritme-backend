@@ -1,33 +1,29 @@
-import { arsipKesenianHandler } from "../handlers/arsipKesenianHandler.js";
+import { adminStatistics } from "../controllers/admin.controller.js";
 import {
-  adminHandler,
-  loginHandler,
-  registrationHandler,
-} from "../handlers/authHandler.js";
-import { komunitasHandler } from "../handlers/komunitasHandler.js";
+  loginAdmin,
+  loginUserAccount,
+  registrationUserAccount,
+} from "../controllers/auth.controller.js";
+import { getHome } from "../controllers/home.controller.js";
+import { getKomunitas } from "../controllers/komunitas.controller.js";
 import {
-  detailPelatihTariHandler,
-  pelatihTariHandler,
-  transactionPelatihTariHandler,
-} from "../handlers/pelatihTariHandler.js";
-import { rootHandler } from "../handlers/rootHandler.js";
+  getDetailPelatihTari,
+  getPelatihTari,
+  transactionPelatihTari,
+} from "../controllers/pelatihTari.controller.js";
 import express from "express";
 
 const routes = express.Router();
 
 // bagusnya dipecah per file aja
-routes.get("/", rootHandler);
-routes.post("/api/auth/login", loginHandler);
-routes.post("/api/auth/login/admin", adminHandler);
-routes.post("/api/auth/registration", registrationHandler);
-routes.post(
-  "/api/pelatih-tari/:name/transactions",
-  transactionPelatihTariHandler
-);
-routes.get("/api/pelatih-tari", pelatihTariHandler);
-routes.get("/api/pelatih-tari/:name", detailPelatihTariHandler);
-routes.get("/api/komunitas", komunitasHandler);
-routes.get("/api/arsip-kesenian", arsipKesenianHandler);
-routes.get("/api/arsip-kesenian/:detail");
+routes.get("/", getHome);
+routes.post("/api/auth/login", loginUserAccount);
+routes.post("/api/auth/login/admin", loginAdmin);
+routes.post("/api/auth/registration", registrationUserAccount);
+routes.post("/api/pelatih-tari/:name/transactions", transactionPelatihTari);
+routes.get("/api/pelatih-tari", getPelatihTari);
+routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
+routes.get("/api/komunitas", getKomunitas);
+routes.get("/api/admin/statistics", adminStatistics);
 
 export default routes;
