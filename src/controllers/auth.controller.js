@@ -1,4 +1,5 @@
 import { connection } from "../lib/utils/connection.js";
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../lib/utils/constants.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
@@ -120,8 +121,8 @@ export async function loginAdmin(req, res) {
       const newToken = encode(payload);
 
       if (
-        payload.email === process.env.ADMIN_EMAIL &&
-        payload.password === process.env.ADMIN_PASSWORD
+        payload.email === ADMIN_EMAIL &&
+        payload.password === ADMIN_PASSWORD
       ) {
         res.status(200).json({
           statusCode: 200,

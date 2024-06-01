@@ -1,4 +1,11 @@
 import { connection } from "../lib/utils/connection.js";
+import {
+  CONDITION,
+  FRONTEND_DEVELOPMENT_URL,
+  FRONTEND_PRODUCTION_URL,
+  MIDTRANS_CLIENT_KEY,
+  MIDTRANS_SERVER_KEY,
+} from "../lib/utils/constants.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
@@ -93,7 +100,7 @@ export async function getDetailPelatihTari(req, res) {
 // Midtrans payment
 export async function transactionPelatihTari(req, res) {
   try {
-    const { customer_details, item_details } = req.body;
+    const { pelatih_tari_name, customer_details, item_details } = req.body;
 
     const { gross_amount, name, email, phone, city } = customer_details;
 
@@ -106,8 +113,8 @@ export async function transactionPelatihTari(req, res) {
     // Create midtrans snap
     const snap = new midtransClient.Snap({
       isProduction: false,
-      serverKey: process.env.MIDTRANS_SERVER_KEY,
-      clientKey: process.env.MIDTRANS_CLIENT_KEY,
+      serverKey: MIDTRANS_SERVER_KEY,
+      clientKey: MIDTRANS_CLIENT_KEY,
     });
 
     /**
@@ -137,13 +144,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        finish: `
-        ${
-          process.env.NODE_ENV === "development"
-            ? process.env.FRONTEND_DEVELOPMENT_URL
-            : process.env.FRONTEND_PRODUCTION_URL
-        }/temukan-pelatih
-        `,
+        finish: `${"http://localhost:3000"}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 

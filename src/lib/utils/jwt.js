@@ -1,14 +1,15 @@
+import { JWT_SECRET } from "./constants.js";
 import jwt from "jsonwebtoken";
 
 export function encode(payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+  return jwt.sign(payload, JWT_SECRET, {
     expiresIn: 60 * 60 * 24,
     algorithm: "HS256",
   });
 }
 
 export function decode(token) {
-  return jwt.decode(token, process.env.JWT_SECRET);
+  return jwt.decode(token, JWT_SECRET);
 }
 
 /*export function verify(token) {

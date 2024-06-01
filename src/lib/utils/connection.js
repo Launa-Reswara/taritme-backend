@@ -1,12 +1,19 @@
+import {
+  DATABASE_HOST,
+  DATABASE_NAME,
+  DATABASE_PASSWORD,
+  DATABASE_PORT,
+  DATABASE_USER,
+} from "./constants.js";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 
 dotenv.config();
 
 export const connection = await mysql.createConnection({
-  port: process.env.DATABASE_PORT,
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  database: process.env.DATABASE_NAME,
-  password: process.env.DATABASE_PASSWORD,
+  port: DATABASE_PORT,
+  host: DATABASE_HOST,
+  user: DATABASE_USER,
+  database: DATABASE_NAME,
+  password: DATABASE_PASSWORD,
 });
