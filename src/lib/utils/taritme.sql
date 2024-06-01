@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 31, 2024 at 10:30 PM
+-- Generation Time: Jun 01, 2024 at 07:21 AM
 -- Server version: 8.0.37
 -- PHP Version: 8.2.19
 
@@ -48,28 +48,6 @@ CREATE TABLE `arsip_kesenian` (
 INSERT INTO `arsip_kesenian` (`id`, `author`, `title`, `date`, `preview_writing`, `preview_image`, `total_like`, `total_comments`) VALUES
 (1, 'Leonardo Da Vince', 'Tari Piring', '2024-05-31', 'Tari Piriang atau Tari Piring merupakan salah satu tarian tradisional di Indonesia yang berasal dari Suku Minangkabau. Secara tradisional, Tari Piring berasal dari Kota Solok, Provinsi Sumatera barat. Saat ini', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/arsip_kesenian/yujkyi5kcrw4slv9uws3', 999, 12),
 (2, 'Leonardo da Vince', 'Tari Indang Badindin', '2024-05-31', 'Tari Dindin Badindin ini merupakan salah satu tari tradisional yang berasal dari Pariaman, Provinsi Sumatera Barat. Indang sendiri berarti gendang kecil, tarian ini mirip dengan Tari Saman yang', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/arsip_kesenian/lnpm7lad27lkjthpzxxb', 999, 12);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `data_pelatih_tari`
---
-
-DROP TABLE IF EXISTS `data_pelatih_tari`;
-CREATE TABLE `data_pelatih_tari` (
-  `id` int NOT NULL,
-  `pelatih_tari_id` int NOT NULL,
-  `no_hp` varchar(20) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
-  `status` enum('Aktif','Tidak Aktif') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `data_pelatih_tari`
---
-
-INSERT INTO `data_pelatih_tari` (`id`, `pelatih_tari_id`, `no_hp`, `email`, `status`) VALUES
-(1, 1, '081234567890', 'luna@lunamay.com', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -160,27 +138,30 @@ CREATE TABLE `komunitas_link_socialmedia` (
 DROP TABLE IF EXISTS `pelatih_tari`;
 CREATE TABLE `pelatih_tari` (
   `id` int NOT NULL,
+  `email` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `no_hp` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `rating` decimal(10,0) DEFAULT NULL,
   `price` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `total_review` int NOT NULL
+  `total_review` int NOT NULL,
+  `status` enum('Aktif','Tidak Aktif') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pelatih_tari`
 --
 
-INSERT INTO `pelatih_tari` (`id`, `name`, `description`, `image`, `rating`, `price`, `created_at`, `total_review`) VALUES
-(1, 'Luna Maya', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/rovcgovxpefsz2vduytv', 5, 100000, '2024-05-27 15:40:14', 10),
-(2, 'Retno Maruti', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/dn4ccifygbvi6q9udjae', 5, 100000, '2024-05-27 20:55:07', 10),
-(3, 'Ayu Bulantrisna', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/hndjpv2fl9wwbpch284m', 5, 100000, '2024-05-27 20:55:35', 10),
-(4, 'Sandrina', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/g3qtmk6fs4wkovuffxya', 5, 100000, '2024-05-27 20:55:46', 10),
-(5, 'Soimah', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/rfqjasbi0x6m0q0fw295', 5, 100000, '2024-05-27 20:56:00', 10),
-(6, 'Lena Guslina', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/xjuriqyfarzcmulp1hcj', 5, 100000, '2024-05-27 20:56:11', 10),
-(7, 'Agnez Mo', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/itbj2vsi65nhxmwhzqfg', 5, 100000, '2024-05-27 20:56:21', 10);
+INSERT INTO `pelatih_tari` (`id`, `email`, `name`, `no_hp`, `description`, `image`, `rating`, `price`, `created_at`, `total_review`, `status`) VALUES
+(1, 'luna@lunamay.com', 'Luna Maya', '081234567890', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/rovcgovxpefsz2vduytv', 5, 100000, '2024-05-27 15:40:14', 10, 'Aktif'),
+(2, '', 'Retno Maruti', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/dn4ccifygbvi6q9udjae', 5, 100000, '2024-05-27 20:55:07', 10, 'Aktif'),
+(3, '', 'Ayu Bulantrisna', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/hndjpv2fl9wwbpch284m', 5, 100000, '2024-05-27 20:55:35', 10, 'Aktif'),
+(4, '', 'Sandrina', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/g3qtmk6fs4wkovuffxya', 5, 100000, '2024-05-27 20:55:46', 10, 'Aktif'),
+(5, '', 'Soimah', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/rfqjasbi0x6m0q0fw295', 5, 100000, '2024-05-27 20:56:00', 10, 'Aktif'),
+(6, '', 'Lena Guslina', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/xjuriqyfarzcmulp1hcj', 5, 100000, '2024-05-27 20:56:11', 10, 'Aktif'),
+(7, '', 'Agnez Mo', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/itbj2vsi65nhxmwhzqfg', 5, 100000, '2024-05-27 20:56:21', 10, 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -255,13 +236,6 @@ INSERT INTO `users_payment_pelatih_tari` (`id`, `user_email`, `users_id`, `is_us
 --
 ALTER TABLE `arsip_kesenian`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `data_pelatih_tari`
---
-ALTER TABLE `data_pelatih_tari`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pelatih_tari_id` (`pelatih_tari_id`);
 
 --
 -- Indexes for table `detail_arsip_kesenian`
@@ -342,7 +316,7 @@ ALTER TABLE `komunitas`
 -- AUTO_INCREMENT for table `pelatih_tari`
 --
 ALTER TABLE `pelatih_tari`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -359,12 +333,6 @@ ALTER TABLE `users_payment_pelatih_tari`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `data_pelatih_tari`
---
-ALTER TABLE `data_pelatih_tari`
-  ADD CONSTRAINT `data_pelatih_tari_ibfk_1` FOREIGN KEY (`pelatih_tari_id`) REFERENCES `pelatih_tari` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `detail_arsip_kesenian`

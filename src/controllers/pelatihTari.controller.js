@@ -1,20 +1,18 @@
 import { connection } from "../lib/utils/connection.js";
 import {
-  CONDITION,
-  FRONTEND_DEVELOPMENT_URL,
-  FRONTEND_PRODUCTION_URL,
+  ADMIN_EMAIL,
+  ADMIN_PASSWORD,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
 } from "../lib/utils/constants.js";
+import { decode } from "../lib/utils/jwt.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
 // TODO: delete, edit
 export async function getPelatihTari(_, res) {
   try {
-    const [result] = await connection.query(
-      `SELECT * FROM pelatih_tari LEFT JOIN data_pelatih_tari ON pelatih_tari.id = data_pelatih_tari.pelatih_tari_id`
-    );
+    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
 
     if (result.length) {
       res.send({
@@ -38,22 +36,42 @@ export async function getPelatihTari(_, res) {
 
 export async function deletePelatihTari(req, res) {
   try {
-    const { email } = req.body;
+    const authHeader = req.headers.authorization;
+    const { email, name } = req.body;
 
-    const [result] = await connection.query(
-      `DELETE pelatih_tari, data_pelatih_tari FROM pelatih_tari LEFT JOIN data_pelatih_tari ON pelatih_tari.id = data_pelatih_tari.pelatih_tari_id WHERE data_pelatih_tari.email = '${email}'`
-    );
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
 
-    if (result.length) {
-      res.send({
-        statusCode: 200,
-        message: "Success get all pelatih tari!",
-        data: result,
-      });
+      if (
+        decodedToken.email === ADMIN_EMAIL &&
+        decodedToken.password === ADMIN_PASSWORD
+      ) {
+        const [error] = await connection.query(
+          `DELETE FROM pelatih_tari WHERE email = '${email}' AND name = '${name}'`
+        );
+
+        if (!error) {
+          res.send({
+            statusCode: 200,
+            message: `Success delete pelatih tari ${name}!`,
+          });
+        } else {
+          res.send({
+            statusCode: 400,
+            message: "Error while deleting!",
+          });
+        }
+      } else {
+        res.send({
+          statusCode: 401,
+          message: "Not Authorized!",
+        });
+      }
     } else {
       res.send({
-        statusCode: 404,
-        message: "Data is not available!",
+        statusCode: 401,
+        message: "Not Authorized!",
       });
     }
   } catch (err) {
@@ -144,6 +162,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
+        // ganti localhost kalo mau up ke production
         finish: `${"http://localhost:3000"}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
