@@ -88,12 +88,12 @@ export async function addPelatihTari(req, res) {
       }
 
       await connection.query(
-        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}')`
+        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10)`
       );
 
       res.send({
         statusCode: 200,
-        message: `Success edit pelatih tari ${name}!`,
+        message: `Success add pelatih tari ${name}!`,
       });
     } else {
       res.send({
@@ -104,7 +104,7 @@ export async function addPelatihTari(req, res) {
   } catch (err) {
     res.send({
       statusCode: 400,
-      message: "Failed to edit data!",
+      message: "Failed to add pelatih tari!",
     });
   }
 }
@@ -112,6 +112,8 @@ export async function addPelatihTari(req, res) {
 export async function editPelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
+
+    const { id } = req.params;
     const { email, name, image, no_hp, status, description, price } = req.body;
 
     if (authHeader) {
@@ -122,16 +124,15 @@ export async function editPelatihTari(req, res) {
         decodedToken.email === ADMIN_EMAIL &&
         decodedToken.password === ADMIN_PASSWORD
       ) {
+        await connection.query(
+          `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE id = '${id}'`
+        );
+
+        res.send({
+          statusCode: 200,
+          message: `Success edit pelatih tari ${name}!`,
+        });
       }
-
-      await connection.query(
-        `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE email = '${email}'`
-      );
-
-      res.send({
-        statusCode: 200,
-        message: `Success edit pelatih tari ${name}!`,
-      });
     } else {
       res.send({
         statusCode: 401,
@@ -141,7 +142,7 @@ export async function editPelatihTari(req, res) {
   } catch (err) {
     res.send({
       statusCode: 400,
-      message: "Failed to edit data!",
+      message: "Failed to edit pelatih tari!",
     });
   }
 }
@@ -149,7 +150,7 @@ export async function editPelatihTari(req, res) {
 export async function deletePelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
-    const { email, name } = req.body;
+    const { id } = req.params;
 
     if (authHeader) {
       const token = authHeader.split(" ")[1];
@@ -159,21 +160,12 @@ export async function deletePelatihTari(req, res) {
         decodedToken.email === ADMIN_EMAIL &&
         decodedToken.password === ADMIN_PASSWORD
       ) {
-        const [error] = await connection.query(
-          `DELETE FROM pelatih_tari WHERE email = '${email}' AND name = '${name}'`
-        );
+        await connection.query(`DELETE FROM pelatih_tari WHERE id = '${id}'`);
 
-        if (!error) {
-          res.send({
-            statusCode: 200,
-            message: `Success delete pelatih tari ${name}!`,
-          });
-        } else {
-          res.send({
-            statusCode: 400,
-            message: "Error while deleting!",
-          });
-        }
+        res.send({
+          statusCode: 200,
+          message: `Success delete pelatih tari`,
+        });
       } else {
         res.send({
           statusCode: 401,

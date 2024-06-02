@@ -16,4 +16,6 @@ export const connection = mysql.createPool({
   user: DATABASE_USER,
   database: DATABASE_NAME,
   password: DATABASE_PASSWORD,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });

@@ -7,6 +7,7 @@ import {
 import { getHome } from "../controllers/home.controller.js";
 import { getKomunitas } from "../controllers/komunitas.controller.js";
 import {
+  addPelatihTari,
   deletePelatihTari,
   editPelatihTari,
   getDetailPelatihTari,
@@ -29,13 +30,14 @@ routes.post(
   verifyJwt,
   transactionPelatihTari
 );
+routes.post("/api/pelatih-tari/add", addPelatihTari);
 routes.post(
   "/api/pelatih-tari/upload-image",
   multerStorage.single("my_file"),
   uploadImagePelatihTari
 );
 
-routes.patch("/api/pelatih-tari/edit", editPelatihTari);
+routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
 
 routes.get("/", getHome);
 routes.get("/api/pelatih-tari", getPelatihTari);
@@ -43,6 +45,6 @@ routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/admin/statistics", adminStatistics);
 
-routes.delete("/api/pelatih-tari/delete", deletePelatihTari);
+routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;
