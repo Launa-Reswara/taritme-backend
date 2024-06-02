@@ -5,9 +5,11 @@
 
 ## Status
 
-WIP(Work In Progress)
+Under heavy development!
 
 ## Documentation of API
+
+SOON!
 
 `/api/auth/login`
 
@@ -17,7 +19,15 @@ WIP(Work In Progress)
 
 `/api/pelatih-tari`
 
-`/api/pelatih-tari/transactions`
+`/api/pelatih-tari/:name`
+
+`/api/pelatih-tari/:name/transactions`
+
+`/api/pelatih-tari/upload-image`
+
+`/api/pelatih-tari/edit`
+
+`/api/admin/statistics`
 
 `/api/komunitas`
 

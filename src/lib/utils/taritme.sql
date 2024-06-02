@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 01, 2024 at 07:21 AM
+-- Generation Time: Jun 02, 2024 at 08:14 AM
 -- Server version: 8.0.37
 -- PHP Version: 8.2.19
 
@@ -155,7 +155,7 @@ CREATE TABLE `pelatih_tari` (
 --
 
 INSERT INTO `pelatih_tari` (`id`, `email`, `name`, `no_hp`, `description`, `image`, `rating`, `price`, `created_at`, `total_review`, `status`) VALUES
-(1, 'luna@lunamay.com', 'Luna Maya', '081234567890', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/rovcgovxpefsz2vduytv', 5, 100000, '2024-05-27 15:40:14', 10, 'Aktif'),
+(1, 'luna@lunamay.com', 'Luna Gaya', '081221941140214', 'dskngmkdsfgmkdmkfg', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717304551/taritme/pelatih_tari/tp9cwqpi2p1mdkate1xd.png', 5, 303000, '2024-05-27 15:40:14', 10, 'Aktif'),
 (2, '', 'Retno Maruti', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/dn4ccifygbvi6q9udjae', 5, 100000, '2024-05-27 20:55:07', 10, 'Aktif'),
 (3, '', 'Ayu Bulantrisna', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/hndjpv2fl9wwbpch284m', 5, 100000, '2024-05-27 20:55:35', 10, 'Aktif'),
 (4, '', 'Sandrina', '0', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/g3qtmk6fs4wkovuffxya', 5, 100000, '2024-05-27 20:55:46', 10, 'Aktif'),

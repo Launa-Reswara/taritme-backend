@@ -2,7 +2,7 @@ import {
   CLOUDINARY_API_KEYS,
   CLOUDINARY_API_SECRET,
   CLOUDINARY_CLOUD_NAME,
-} from "../utils/constants.js";
+} from "./constants.js";
 import cloudinary from "cloudinary";
 
 cloudinary.v2.config({

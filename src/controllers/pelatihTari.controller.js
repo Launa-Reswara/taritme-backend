@@ -1,4 +1,3 @@
-import { uploadImage } from "../lib/helpers/uploadImage.js";
 import { connection } from "../lib/utils/connection.js";
 import {
   ADMIN_EMAIL,
@@ -7,6 +6,7 @@ import {
   MIDTRANS_SERVER_KEY,
 } from "../lib/utils/constants.js";
 import { decode } from "../lib/utils/jwt.js";
+import { uploadImage } from "../lib/utils/uploadImage.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
