@@ -5,6 +5,7 @@ import { checkPassword, hashPassword } from "../lib/utils/password.js";
 
 export async function loginUserAccount(req, res) {
   try {
+    console.log(req.body);
     if (!req.body.email || !req.body.password) {
       res.json({
         statusCode: 401,

@@ -24,4 +24,8 @@ export const PRODUCTION_URL = process.env.PRODUCTION_URL;
 export const FRONTEND_DEVELOPMENT_URL = process.env.FRONTEND_DEVELOPMENT_URL;
 export const FRONTEND_PRODUCTION_URL = process.env.FRONTEND_PRODUCTION_URL;
 
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_API_KEYS = process.env.CLOUDINARY_API_KEYS;
+export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
+
 export const JWT_SECRET = process.env.JWT_SECRET;

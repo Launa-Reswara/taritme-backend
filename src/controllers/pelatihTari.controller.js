@@ -1,3 +1,4 @@
+import { uploadImage } from "../lib/helpers/uploadImage.js";
 import { connection } from "../lib/utils/connection.js";
 import {
   ADMIN_EMAIL,
@@ -30,6 +31,117 @@ export async function getPelatihTari(_, res) {
     res.send({
       statusCode: 400,
       message: "Failed to get data!",
+    });
+  }
+}
+
+export async function uploadImagePelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+
+      let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+      const cloudinaryResponse = await uploadImage(dataURI);
+
+      if (cloudinaryResponse) {
+        res.send({
+          statusCode: 200,
+          message: "Success upload image!",
+          data: cloudinaryResponse.secure_url,
+        });
+      } else {
+        res.send({
+          statusCode: 400,
+          message: "Error while uploading image!",
+        });
+      }
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Not Authorized!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to edit data!",
+    });
+  }
+}
+
+export async function addPelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+    const { email, name, image, no_hp, status, description, price } = req.body;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      if (
+        decodedToken.email === ADMIN_EMAIL &&
+        decodedToken.password === ADMIN_PASSWORD
+      ) {
+      }
+
+      await connection.query(
+        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}')`
+      );
+
+      res.send({
+        statusCode: 200,
+        message: `Success edit pelatih tari ${name}!`,
+      });
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Not Authorized!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to edit data!",
+    });
+  }
+}
+
+export async function editPelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+    const { email, name, image, no_hp, status, description, price } = req.body;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      if (
+        decodedToken.email === ADMIN_EMAIL &&
+        decodedToken.password === ADMIN_PASSWORD
+      ) {
+      }
+
+      await connection.query(
+        `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE email = '${email}'`
+      );
+
+      res.send({
+        statusCode: 200,
+        message: `Success edit pelatih tari ${name}!`,
+      });
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Not Authorized!",
+      });
+    }
+  } catch (err) {
+    res.send({
+      statusCode: 400,
+      message: "Failed to edit data!",
     });
   }
 }
@@ -77,7 +189,7 @@ export async function deletePelatihTari(req, res) {
   } catch (err) {
     res.send({
       statusCode: 400,
-      message: "Failed to get data!",
+      message: "Failed to delete!",
     });
   }
 }

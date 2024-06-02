@@ -12,16 +12,3 @@ export function decode(token) {
   return jwt.decode(token, JWT_SECRET);
 }
 
-/*export function verify(token) {
-  jwt.verify(token, process.env.JWT_SECRET, (err) => {
-    if (err) {
-      res.status(403).json({ statusCode: 403, message: "Invalid token!" });
-    } else {
-      res.status(200).json({
-        statusCode: 200,
-        message: "Success!",
-      });
-    }
-  });
-}
-*/
