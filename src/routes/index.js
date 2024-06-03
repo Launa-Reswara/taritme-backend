@@ -1,4 +1,3 @@
-import { adminStatistics } from "../controllers/admin.controller.js";
 import {
   loginAdmin,
   loginUserAccount,
@@ -15,13 +14,13 @@ import {
   transactionPelatihTari,
   uploadImagePelatihTari,
 } from "../controllers/pelatihTari.controller.js";
+import { getUsers } from "../controllers/users.controller.js";
 import { multerStorage } from "../lib/utils/multer.js";
 import { verifyJwt } from "../middleware/index.js";
 import express from "express";
 
 const routes = express.Router();
 
-// bagusnya dipecah per file aja
 routes.post("/api/auth/login", loginUserAccount);
 routes.post("/api/auth/login/admin", loginAdmin);
 routes.post("/api/auth/registration", registrationUserAccount);
@@ -43,7 +42,7 @@ routes.get("/", getHome);
 routes.get("/api/pelatih-tari", getPelatihTari);
 routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
-routes.get("/api/admin/statistics", adminStatistics);
+routes.get("/api/users", getUsers);
 
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 

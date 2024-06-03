@@ -10,31 +10,6 @@ import { uploadImage } from "../lib/utils/uploadImage.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
-// TODO: delete, edit
-export async function getPelatihTari(_, res) {
-  try {
-    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
-
-    if (result.length) {
-      res.send({
-        statusCode: 200,
-        message: "Success get all pelatih tari!",
-        data: result,
-      });
-    } else {
-      res.send({
-        statusCode: 404,
-        message: "Data is not available!",
-      });
-    }
-  } catch (err) {
-    res.send({
-      statusCode: 400,
-      message: "Failed to get data!",
-    });
-  }
-}
-
 export async function uploadImagePelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
@@ -88,7 +63,10 @@ export async function addPelatihTari(req, res) {
       }
 
       await connection.query(
-        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10)`
+        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${new Date()
+          .toISOString()
+          .slice(0, 19)
+          .replace("T", " ")}')`
       );
 
       res.send({
@@ -282,6 +260,27 @@ export async function transactionPelatihTari(req, res) {
     });
   } catch (err) {
     res.json({ statusCode: 400, message: "Failed to create transaction!" });
+  }
+}
+
+export async function getPelatihTari(_, res) {
+  try {
+    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
+
+    if (result.length) {
+      res.send({
+        statusCode: 200,
+        message: "Success get all pelatih tari!",
+        data: result,
+      });
+    } else {
+      res.send({
+        statusCode: 404,
+        message: "Data is not available!",
+      });
+    }
+  } catch (err) {
+    res.json({ statusCode: 400, message: "Failed to get all pelatih tari!" });
   }
 }
 
