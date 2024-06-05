@@ -35,6 +35,7 @@ routes.post(
   multerStorage.single("my_file"),
   uploadImagePelatihTari
 );
+routes.post("/api/users/profile", getUserProfile);
 
 routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
 
@@ -43,7 +44,6 @@ routes.get("/api/pelatih-tari", getPelatihTari);
 routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/users", getUsers);
-routes.get("/api/users/profile/:id", getUserProfile);
 
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 

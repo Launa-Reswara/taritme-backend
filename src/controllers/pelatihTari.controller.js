@@ -15,32 +15,37 @@ export async function uploadImagePelatihTari(req, res) {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
-      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
 
-      let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+      if (decodedToken.email === ADMIN_EMAIL && decodedToken.ADMIN_PASSWORD) {
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
 
-      const cloudinaryResponse = await uploadImage(dataURI);
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
 
-      if (cloudinaryResponse) {
-        res.send({
-          statusCode: 200,
-          message: "Success upload image!",
-          data: cloudinaryResponse.secure_url,
-        });
-      } else {
-        res.send({
-          statusCode: 400,
-          message: "Error while uploading image!",
-        });
+        const cloudinaryResponse = await uploadImage(dataURI);
+
+        if (cloudinaryResponse) {
+          res.status().json({
+            statusCode: 200,
+            message: "Success upload image!",
+            data: cloudinaryResponse.secure_url,
+          });
+        } else {
+          res.status().json({
+            statusCode: 400,
+            message: "Error while uploading image!",
+          });
+        }
       }
     } else {
-      res.send({
+      res.status().json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status().json({
       statusCode: 400,
       message: "Failed to edit data!",
     });
@@ -60,27 +65,26 @@ export async function addPelatihTari(req, res) {
         decodedToken.email === ADMIN_EMAIL &&
         decodedToken.password === ADMIN_PASSWORD
       ) {
+        await pool.query(
+          `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ")}')`
+        );
+
+        res.status().json({
+          statusCode: 200,
+          message: `Success add pelatih tari ${name}!`,
+        });
       }
-
-      await pool.query(
-        `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${new Date()
-          .toISOString()
-          .slice(0, 19)
-          .replace("T", " ")}')`
-      );
-
-      res.send({
-        statusCode: 200,
-        message: `Success add pelatih tari ${name}!`,
-      });
     } else {
-      res.send({
+      res.status().json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status().json({
       statusCode: 400,
       message: "Failed to add pelatih tari!",
     });
@@ -106,19 +110,19 @@ export async function editPelatihTari(req, res) {
           `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE id = '${id}'`
         );
 
-        res.send({
+        res.status().json({
           statusCode: 200,
           message: `Success edit pelatih tari ${name}!`,
         });
       }
     } else {
-      res.send({
+      res.status().json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status().json({
       statusCode: 400,
       message: "Failed to edit pelatih tari!",
     });
@@ -140,24 +144,24 @@ export async function deletePelatihTari(req, res) {
       ) {
         await pool.query(`DELETE FROM pelatih_tari WHERE id = '${id}'`);
 
-        res.send({
+        res.status().json({
           statusCode: 200,
           message: `Success delete pelatih tari`,
         });
       } else {
-        res.send({
+        res.status().json({
           statusCode: 401,
           message: "Not Authorized!",
         });
       }
     } else {
-      res.send({
+      res.status().json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status().json({
       statusCode: 400,
       message: "Failed to delete!",
     });
@@ -173,26 +177,26 @@ export async function getDetailPelatihTari(req, res) {
       .map((item) => item[0].toUpperCase() + item.substring(1))
       .join(" ");
 
-    const [result] = await pool.query(
+    const [results] = await pool.query(
       `SELECT name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizedName}'`
     );
 
-    if (result.length) {
-      res.send({
+    if (results.length) {
+      res.status(200).json({
         statusCode: 200,
         message: "Success get detail pelatih tari!",
-        data: result,
+        data: results,
       });
     } else {
-      res.send({
+      res.status(404).json({
         statusCode: 404,
-        message: "Data is not available!",
+        message: "No available detail pelatih tari!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status(400).json({
       statusCode: 400,
-      message: "Failed to get data!",
+      message: "Failed to get detail pelatih tari!",
     });
   }
 }
@@ -251,7 +255,7 @@ export async function transactionPelatihTari(req, res) {
 
     // Init transaction
     await snap.createTransaction(parameter).then((transaction) => {
-      res.json({
+      res.status(200).json({
         statusCode: 200,
         message: "Success create transaction!",
         token: transaction.token,
@@ -259,41 +263,45 @@ export async function transactionPelatihTari(req, res) {
       });
     });
   } catch (err) {
-    res.json({ statusCode: 400, message: "Failed to create transaction!" });
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to create transaction!" });
   }
 }
 
 export async function getPelatihTari(_, res) {
   try {
-    const [result] = await pool.query(`SELECT * FROM pelatih_tari`);
+    const [results] = await pool.query(`SELECT * FROM pelatih_tari`);
 
-    if (result.length) {
-      res.send({
+    if (results.length) {
+      res.status(200).json({
         statusCode: 200,
         message: "Success get all pelatih tari!",
-        data: result,
+        data: results,
       });
     } else {
-      res.send({
+      res.status(404).json({
         statusCode: 404,
-        message: "Data is not available!",
+        message: "Noavailable pelatih tari!",
       });
     }
   } catch (err) {
-    res.json({ statusCode: 400, message: "Failed to get all pelatih tari!" });
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to get all pelatih tari!" });
   }
 }
 
 /*export async function userPaymentPelatihTariHandler(req, res) {
   try {
     const { email } = req.body;
-    const [result] = await pool.query(
+    const [results] = await pool.query(
       `SELECT * FROM user_payment_pelatih_tari`
     );
 
-    if (result.length) {
+    if (results.length) {
     }
   } catch (err) {
-    res.json({ statusCode: 400, message: "Failed!" });
+    res.status().json({ statusCode: 400, message: "Failed!" });
   }
 }*/

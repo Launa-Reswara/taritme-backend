@@ -6,7 +6,7 @@ import { pool } from "../lib/utils/pool.js";
 export async function loginUserAccount(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Login gagal, data tidak lengkap!",
       });
@@ -36,14 +36,14 @@ export async function loginUserAccount(req, res) {
           token: newToken,
         });
       } else {
-        res.json({
+        res.status(401).json({
           statusCode: 401,
           message: "Login gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.json({
+    res.status(400).json({
       status: 400,
       message: "Login gagal!",
       cause: err.message,
@@ -64,41 +64,36 @@ export async function registrationUserAccount(req, res) {
     );
 
     if (!payload.name || !payload.email || !payload.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
       });
     } else if (results.length) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message:
           "Registrasi akun gagal, Email yang dimasukkan telah dipakai oleh akun lain!",
       });
     } else {
-      const [results] = await pool.query(
+      await pool.query(
         `INSERT INTO users (name, email, password) VALUES ('${
           payload.name
         }', '${payload.email}', '${hashPassword(payload.password)}')`
       );
 
-      if (results) {
-        res.status(200).json({
-          statusCode: 200,
-          message: "Registrasi akun berhasil!",
-        });
-      } else {
-        res.json({
-          statusCode: 400,
-          message: "Registrasi akun gagal, silahkan coba lagi!",
-        });
-      }
+      await pool.query(
+        `INSERT INTO users_profile (users_id) SELECT id FROM users WHERE id = LAST_INSERT_ID() LIMIT 1`
+      );
+
+      res.status(200).json({
+        statusCode: 200,
+        message: "Registrasi akun berhasil!",
+      });
     }
   } catch (err) {
-    res.json({
+    res.status(400).json({
       statusCode: 400,
       message: "Registrasi akun gagal, silahkan coba lagi!",
-      // Note: kalo udah production, dihapus cause nya
-      cause: err.message,
     });
   }
 }
@@ -106,7 +101,7 @@ export async function registrationUserAccount(req, res) {
 export async function loginAdmin(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Login sebagai admin gagal, data tidak lengkap!",
       });
@@ -129,14 +124,14 @@ export async function loginAdmin(req, res) {
           token: newToken,
         });
       } else {
-        res.json({
+        res.status(401).json({
           statusCode: 401,
           message: "Login sebagai admin gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.json({
+    res.status(400).json({
       statusCode: 400,
       message: "Login sebagai admin gagal!",
       cause: err.message,

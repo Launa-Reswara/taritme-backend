@@ -5,19 +5,19 @@ export async function getRiwayatKursus(req, res) {
     const [results] = await pool.query(`SELECT * FROM riwayat_kursus`);
 
     if (results.length) {
-      res.send({
+      res.status(200).json({
         statusCode: 200,
-        message: "Berhasil mendapatkan riwayat kurus!",
+        message: "Success get riwayat kursus!",
         data: results,
       });
     } else {
-      res.send({
+      res.status(404).json({
         statusCode: 404,
-        message: "Data tidak diemukan!",
+        message: "No available riwayat kursus!",
       });
     }
   } catch (err) {
-    res.send({
+    res.status(400).json({
       statusCode: 400,
       message: "Failed to get riwayat kursus!",
     });

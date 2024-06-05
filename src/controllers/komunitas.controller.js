@@ -11,12 +11,12 @@ export async function getKomunitas(_, res) {
         data: results,
       });
     } else {
-      res.json({
+      res.status(404).json({
         statusCode: 404,
-        message: "Komunitas data is not found!",
+        message: "No available komunitas!",
       });
     }
   } catch (err) {
-    res.json({ statusCode: 500, message: err.message });
+    res.status(400).json({ statusCode: 400, message: err.message });
   }
 }

@@ -1,45 +1,54 @@
+import { decode } from "../lib/utils/jwt.js";
 import { pool } from "../lib/utils/pool.js";
 
 export async function getUsers(_, res) {
   try {
-    const [result] = await pool.query(`SELECT * FROM users`);
+    const [results] = await pool.query(`SELECT * FROM users`);
 
-    if (result.length) {
-      res.send({
+    if (results.length) {
+      res.status(200).json({
         statusCode: 200,
         message: "Success get all pelatih tari!",
-        data: result,
+        data: results,
       });
     } else {
-      res.send({
+      res.status(404).json({
         statusCode: 404,
         message: "No available users!",
       });
     }
   } catch (err) {
-    res.json({ statusCode: 400, message: "Failed to get all users" });
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to get all users" });
   }
 }
 
-export async function getUserProfile(_, res) {
+export async function getUserProfile(req, res) {
   try {
+    const { token } = req.body;
+
+    const decodedToken = decode(token);
+
     const [results] = await pool.query(
-      `SELECT id, name, email, users_profile.jenis_kelamin, users_profile.bio, users_profile.no_hp, users_profile.age, users_profile.image FROM users LEFT JOIN users_profil WHERE id = users_profile.id`
+      `SELECT id, name, email, FROM users WHERE email = '${decodedToken.email}'`
     );
 
     if (results.length) {
-      res.json({
+      res.status(200).json({
         statusCode: 200,
-        message: "Success get user profil!",
+        message: "Success get user profile!",
         data: results,
       });
     } else {
-      res.json({
+      res.status(404).json({
         statusCode: 404,
         message: "No available user profile!",
       });
     }
   } catch (err) {
-    res.json({ statusCode: 400, message: "Failed to get all users" });
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to get user profile!" });
   }
 }
