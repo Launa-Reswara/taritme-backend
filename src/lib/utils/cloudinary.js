@@ -3,9 +3,9 @@ import {
   CLOUDINARY_API_SECRET,
   CLOUDINARY_CLOUD_NAME,
 } from "./constants.js";
-import cloudinary from "cloudinary";
+import { v2 } from "cloudinary";
 
-cloudinary.v2.config({
+v2.config({
   cloud_name: CLOUDINARY_CLOUD_NAME,
   api_key: CLOUDINARY_API_KEYS,
   api_secret: CLOUDINARY_API_SECRET,
@@ -19,6 +19,6 @@ const opts = {
 };
 
 export async function uploadImage(image) {
-  const res = await cloudinary.v2.uploader.upload(image, opts);
+  const res = await v2.uploader.upload(image, opts);
   return res;
 }

@@ -1,11 +1,10 @@
-import { connection } from "../lib/utils/connection.js";
 import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../lib/utils/constants.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
+import { pool } from "../lib/utils/pool.js";
 
 export async function loginUserAccount(req, res) {
   try {
-    console.log(req.body);
     if (!req.body.email || !req.body.password) {
       res.json({
         statusCode: 401,
@@ -17,7 +16,7 @@ export async function loginUserAccount(req, res) {
         password: req.body.password,
       };
 
-      const [results] = await connection.query(
+      const [results] = await pool.query(
         `SELECT * FROM users WHERE email = '${payload.email}'`
       );
 
@@ -60,7 +59,7 @@ export async function registrationUserAccount(req, res) {
       password: req.body.password,
     };
 
-    const [results] = await connection.query(
+    const [results] = await pool.query(
       `SELECT * FROM users WHERE email = '${payload.email}' `
     );
 
@@ -76,15 +75,14 @@ export async function registrationUserAccount(req, res) {
           "Registrasi akun gagal, Email yang dimasukkan telah dipakai oleh akun lain!",
       });
     } else {
-      const [results] = await connection.query(
+      const [results] = await pool.query(
         `INSERT INTO users (name, email, password) VALUES ('${
           payload.name
         }', '${payload.email}', '${hashPassword(payload.password)}')`
       );
 
       if (results) {
-        res.status(200);
-        res.json({
+        res.status(200).json({
           statusCode: 200,
           message: "Registrasi akun berhasil!",
         });

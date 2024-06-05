@@ -1,8 +1,8 @@
-import { connection } from "../lib/utils/connection.js";
+import { pool } from "../lib/utils/pool.js";
 
 export async function getRiwayatKursus(req, res) {
   try {
-    const [results] = await connection.query(`SELECT * FROM riwayat_kursus`);
+    const [results] = await pool.query(`SELECT * FROM riwayat_kursus`);
 
     if (results.length) {
       res.send({

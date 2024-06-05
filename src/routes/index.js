@@ -14,7 +14,7 @@ import {
   transactionPelatihTari,
   uploadImagePelatihTari,
 } from "../controllers/pelatihTari.controller.js";
-import { getUsers } from "../controllers/users.controller.js";
+import { getUserProfile, getUsers } from "../controllers/users.controller.js";
 import { multerStorage } from "../lib/utils/multer.js";
 import { verifyJwt } from "../middleware/index.js";
 import express from "express";
@@ -43,6 +43,7 @@ routes.get("/api/pelatih-tari", getPelatihTari);
 routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/users", getUsers);
+routes.get("/api/users/profile/:id", getUserProfile);
 
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 

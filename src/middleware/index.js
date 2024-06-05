@@ -11,7 +11,7 @@ export async function verifyJwt(req, res, next) {
       if (err) {
         return res
           .status(403)
-          .json({ statusCode: 403, message: "Invalid token!" });
+          .json({ statusCode: 403, message: "Your token is expired!" });
       }
 
       req.user = user;
@@ -20,6 +20,6 @@ export async function verifyJwt(req, res, next) {
   } else {
     return res
       .status(401)
-      .json({ statusCode: 403, message: "Not Authorized!" });
+      .json({ statusCode: 401, message: "Not Authorized!" });
   }
 }

@@ -1,8 +1,8 @@
-import { connection } from "../lib/utils/connection.js";
+import { pool } from "../lib/utils/pool.js";
 
 export async function getKomunitas(_, res) {
   try {
-    const [results] = await connection.query(`SELECT * FROM komunitas`);
+    const [results] = await pool.query(`SELECT * FROM komunitas`);
 
     if (results.length) {
       res.status(200).json({

@@ -1,4 +1,4 @@
-import { connection } from "../lib/utils/connection.js";
+import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
@@ -6,7 +6,7 @@ import {
   MIDTRANS_SERVER_KEY,
 } from "../lib/utils/constants.js";
 import { decode } from "../lib/utils/jwt.js";
-import { uploadImage } from "../lib/utils/uploadImage.js";
+import { pool } from "../lib/utils/pool.js";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
@@ -62,7 +62,7 @@ export async function addPelatihTari(req, res) {
       ) {
       }
 
-      await connection.query(
+      await pool.query(
         `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${new Date()
           .toISOString()
           .slice(0, 19)
@@ -102,7 +102,7 @@ export async function editPelatihTari(req, res) {
         decodedToken.email === ADMIN_EMAIL &&
         decodedToken.password === ADMIN_PASSWORD
       ) {
-        await connection.query(
+        await pool.query(
           `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE id = '${id}'`
         );
 
@@ -138,7 +138,7 @@ export async function deletePelatihTari(req, res) {
         decodedToken.email === ADMIN_EMAIL &&
         decodedToken.password === ADMIN_PASSWORD
       ) {
-        await connection.query(`DELETE FROM pelatih_tari WHERE id = '${id}'`);
+        await pool.query(`DELETE FROM pelatih_tari WHERE id = '${id}'`);
 
         res.send({
           statusCode: 200,
@@ -173,7 +173,7 @@ export async function getDetailPelatihTari(req, res) {
       .map((item) => item[0].toUpperCase() + item.substring(1))
       .join(" ");
 
-    const [result] = await connection.query(
+    const [result] = await pool.query(
       `SELECT name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizedName}'`
     );
 
@@ -265,7 +265,7 @@ export async function transactionPelatihTari(req, res) {
 
 export async function getPelatihTari(_, res) {
   try {
-    const [result] = await connection.query(`SELECT * FROM pelatih_tari`);
+    const [result] = await pool.query(`SELECT * FROM pelatih_tari`);
 
     if (result.length) {
       res.send({
@@ -287,7 +287,7 @@ export async function getPelatihTari(_, res) {
 /*export async function userPaymentPelatihTariHandler(req, res) {
   try {
     const { email } = req.body;
-    const [result] = await connection.query(
+    const [result] = await pool.query(
       `SELECT * FROM user_payment_pelatih_tari`
     );
 

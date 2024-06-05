@@ -11,4 +11,3 @@ export function encode(payload) {
 export function decode(token) {
   return jwt.decode(token, JWT_SECRET);
 }
-
