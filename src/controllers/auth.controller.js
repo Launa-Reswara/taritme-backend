@@ -1,11 +1,12 @@
-import { connection } from "../lib/utils/connection.js";
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../lib/utils/constants.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
+import { pool } from "../lib/utils/pool.js";
 
-export async function loginHandler(req, res) {
+export async function loginUserAccount(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Login gagal, data tidak lengkap!",
       });
@@ -15,7 +16,7 @@ export async function loginHandler(req, res) {
         password: req.body.password,
       };
 
-      const [results] = await connection.query(
+      const [results] = await pool.query(
         `SELECT * FROM users WHERE email = '${payload.email}'`
       );
 
@@ -29,27 +30,27 @@ export async function loginHandler(req, res) {
 
       if (results.length && isTruePassword) {
         res.status(200).json({
-          statusCode: res.statusCode,
+          statusCode: 200,
           message: "Login berhasil!",
           data: results[0],
           token: newToken,
         });
       } else {
-        res.json({
+        res.status(401).json({
           statusCode: 401,
           message: "Login gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.json({
-      status: 500,
+    res.status(400).json({
+      statusCode: 400,
       message: "Login gagal!",
     });
   }
 }
 
-export async function registrationHandler(req, res) {
+export async function registrationUserAccount(req, res) {
   try {
     const payload = {
       name: req.body.name,
@@ -57,53 +58,49 @@ export async function registrationHandler(req, res) {
       password: req.body.password,
     };
 
-    const [results] = await connection.query(
+    const [results] = await pool.query(
       `SELECT * FROM users WHERE email = '${payload.email}' `
     );
 
     if (!payload.name || !payload.email || !payload.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
       });
     } else if (results.length) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message:
           "Registrasi akun gagal, Email yang dimasukkan telah dipakai oleh akun lain!",
       });
     } else {
-      const [results] = await connection.query(
+      await pool.query(
         `INSERT INTO users (name, email, password) VALUES ('${
           payload.name
         }', '${payload.email}', '${hashPassword(payload.password)}')`
       );
 
-      if (results) {
-        res.status(200);
-        res.json({
-          statusCode: 200,
-          message: "Registrasi akun berhasil!",
-        });
-      } else {
-        res.json({
-          statusCode: 400,
-          message: "Registrasi akun gagal, silahkan coba lagi!",
-        });
-      }
+      await pool.query(
+        `INSERT INTO users_profile (users_id) SELECT id FROM users WHERE id = LAST_INSERT_ID() LIMIT 1`
+      );
+
+      res.status(200).json({
+        statusCode: 200,
+        message: "Registrasi akun berhasil!",
+      });
     }
   } catch (err) {
-    res.json({
-      statusCode: 500,
+    res.status(400).json({
+      statusCode: 400,
       message: "Registrasi akun gagal, silahkan coba lagi!",
     });
   }
 }
 
-export async function adminHandler(req, res) {
+export async function loginAdmin(req, res) {
   try {
     if (!req.body.email || !req.body.password) {
-      res.json({
+      res.status(401).json({
         statusCode: 401,
         message: "Login sebagai admin gagal, data tidak lengkap!",
       });
@@ -117,22 +114,25 @@ export async function adminHandler(req, res) {
       const newToken = encode(payload);
 
       if (
-        payload.email === process.env.ADMIN_EMAIL &&
-        payload.password === process.env.ADMIN_PASSWORD
+        payload.email === ADMIN_EMAIL &&
+        payload.password === ADMIN_PASSWORD
       ) {
         res.status(200).json({
           statusCode: 200,
-          message: "Login berhasil!",
+          message: "Login sebagai admin berhasil!",
           token: newToken,
         });
       } else {
-        res.json({
+        res.status(401).json({
           statusCode: 401,
           message: "Login sebagai admin gagal, data yang dimasukkan salah!",
         });
       }
     }
   } catch (err) {
-    res.json({ statusCode: 500, message: "Login sebagai admin gagal!" });
+    res.status(400).json({
+      statusCode: 400,
+      message: "Login sebagai admin gagal!",
+    });
   }
 }

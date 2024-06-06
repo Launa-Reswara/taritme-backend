@@ -1,3 +1,4 @@
+import { PORT } from "./src/lib/utils/constants.js";
 import logger from "./src/lib/utils/logger.js";
 import routes from "./src/routes/index.js";
 import bodyParser from "body-parser";
@@ -40,8 +41,8 @@ async function main() {
   // routes
   app.use(routes);
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server sudah jalan di port ${process.env.PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Server sudah jalan di port ${PORT}`);
   });
 }
 

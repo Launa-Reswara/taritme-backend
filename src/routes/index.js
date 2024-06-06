@@ -1,20 +1,50 @@
 import {
-  adminHandler,
-  loginHandler,
-  registrationHandler,
-} from "../handlers/authHandler.js";
-import { komunitasHandler } from "../handlers/komunitasHandler.js";
-import { rootHandler } from "../handlers/rootHandler.js";
-import { transactionHandler } from "../handlers/transactionsHandler.js";
+  loginAdmin,
+  loginUserAccount,
+  registrationUserAccount,
+} from "../controllers/auth.controller.js";
+import { getHome } from "../controllers/home.controller.js";
+import { getKomunitas } from "../controllers/komunitas.controller.js";
+import {
+  addPelatihTari,
+  deletePelatihTari,
+  editPelatihTari,
+  getDetailPelatihTari,
+  getPelatihTari,
+  transactionPelatihTari,
+  uploadImagePelatihTari,
+} from "../controllers/pelatihTari.controller.js";
+import { getUserProfile, getUsers } from "../controllers/users.controller.js";
+import { multerStorage } from "../lib/utils/multer.js";
+import { verifyJwt } from "../middleware/index.js";
 import express from "express";
 
 const routes = express.Router();
 
-routes.get("/", rootHandler);
-routes.post("/api/auth/login", loginHandler);
-routes.post("/api/auth/login/admin", adminHandler);
-routes.post("/api/auth/registration", registrationHandler);
-routes.post("/api/pelatih-tari/transactions", transactionHandler);
-routes.get("/api/komunitas", komunitasHandler);
+routes.post("/api/auth/login", loginUserAccount);
+routes.post("/api/auth/login/admin", loginAdmin);
+routes.post("/api/auth/registration", registrationUserAccount);
+routes.post(
+  "/api/pelatih-tari/:name/transactions",
+  verifyJwt,
+  transactionPelatihTari
+);
+routes.post("/api/pelatih-tari/add", addPelatihTari);
+routes.post(
+  "/api/pelatih-tari/upload-image",
+  multerStorage.single("my_file"),
+  uploadImagePelatihTari
+);
+routes.post("/api/users/profile", getUserProfile);
+
+routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
+
+routes.get("/", getHome);
+routes.get("/api/pelatih-tari", getPelatihTari);
+routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
+routes.get("/api/komunitas", getKomunitas);
+routes.get("/api/users", getUsers);
+
+routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;
