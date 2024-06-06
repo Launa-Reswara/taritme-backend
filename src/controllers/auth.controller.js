@@ -30,7 +30,7 @@ export async function loginUserAccount(req, res) {
 
       if (results.length && isTruePassword) {
         res.status(200).json({
-          statusCode: res.statusCode,
+          statusCode: 200,
           message: "Login berhasil!",
           data: results[0],
           token: newToken,
@@ -44,9 +44,8 @@ export async function loginUserAccount(req, res) {
     }
   } catch (err) {
     res.status(400).json({
-      status: 400,
+      statusCode: 400,
       message: "Login gagal!",
-      cause: err.message,
     });
   }
 }
@@ -134,7 +133,6 @@ export async function loginAdmin(req, res) {
     res.status(400).json({
       statusCode: 400,
       message: "Login sebagai admin gagal!",
-      cause: err.message,
     });
   }
 }

@@ -11,14 +11,14 @@ v2.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
-const opts = {
-  overwrite: true,
-  invalidate: true,
-  resource_type: "image",
-  folder: "taritme/pelatih_tari",
-};
+export async function uploadImage(image, folderName) {
+  const opts = {
+    overwrite: true,
+    invalidate: true,
+    resource_type: "image",
+    folder: `taritme/${folderName}`,
+  };
 
-export async function uploadImage(image) {
   const res = await v2.uploader.upload(image, opts);
   return res;
 }

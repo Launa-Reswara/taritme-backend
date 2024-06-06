@@ -13,39 +13,41 @@ import { nanoid } from "nanoid";
 export async function uploadImagePelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
-
     if (authHeader) {
       const token = authHeader.split(" ")[1];
       const decodedToken = decode(token);
 
-      if (decodedToken.email === ADMIN_EMAIL && decodedToken.ADMIN_PASSWORD) {
+      if (
+        decodedToken.email === ADMIN_EMAIL &&
+        decodedToken.password === ADMIN_PASSWORD
+      ) {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
 
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
 
-        const cloudinaryResponse = await uploadImage(dataURI);
+        const cloudinaryResponse = await uploadImage(dataURI, "pelatih_tari");
 
         if (cloudinaryResponse) {
-          res.status().json({
+          res.status(200).json({
             statusCode: 200,
             message: "Success upload image!",
             data: cloudinaryResponse.secure_url,
           });
         } else {
-          res.status().json({
+          res.status(400).json({
             statusCode: 400,
             message: "Error while uploading image!",
           });
         }
       }
     } else {
-      res.status().json({
+      res.status(401).json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.status().json({
+    res.status(400).json({
       statusCode: 400,
       message: "Failed to edit data!",
     });
@@ -72,19 +74,19 @@ export async function addPelatihTari(req, res) {
             .replace("T", " ")}')`
         );
 
-        res.status().json({
+        res.status(200).json({
           statusCode: 200,
           message: `Success add pelatih tari ${name}!`,
         });
       }
     } else {
-      res.status().json({
+      res.status(401).json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.status().json({
+    res.status(400).json({
       statusCode: 400,
       message: "Failed to add pelatih tari!",
     });
@@ -110,19 +112,19 @@ export async function editPelatihTari(req, res) {
           `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE id = '${id}'`
         );
 
-        res.status().json({
+        res.status(200).json({
           statusCode: 200,
           message: `Success edit pelatih tari ${name}!`,
         });
       }
     } else {
-      res.status().json({
+      res.status(401).json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.status().json({
+    res.status(400).json({
       statusCode: 400,
       message: "Failed to edit pelatih tari!",
     });
@@ -144,24 +146,24 @@ export async function deletePelatihTari(req, res) {
       ) {
         await pool.query(`DELETE FROM pelatih_tari WHERE id = '${id}'`);
 
-        res.status().json({
+        res.status(200).json({
           statusCode: 200,
           message: `Success delete pelatih tari`,
         });
       } else {
-        res.status().json({
+        res.status(401).json({
           statusCode: 401,
           message: "Not Authorized!",
         });
       }
     } else {
-      res.status().json({
+      res.status(401).json({
         statusCode: 401,
         message: "Not Authorized!",
       });
     }
   } catch (err) {
-    res.status().json({
+    res.status(400).json({
       statusCode: 400,
       message: "Failed to delete!",
     });
@@ -282,7 +284,7 @@ export async function getPelatihTari(_, res) {
     } else {
       res.status(404).json({
         statusCode: 404,
-        message: "Noavailable pelatih tari!",
+        message: "No available pelatih tari!",
       });
     }
   } catch (err) {
