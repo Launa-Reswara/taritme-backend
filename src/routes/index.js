@@ -6,6 +6,7 @@ import {
 import { getHome } from "../controllers/home.controller.js";
 import { getKomunitas } from "../controllers/komunitas.controller.js";
 import {
+  addImagePelatihTari,
   addPelatihTari,
   deletePelatihTari,
   editPelatihTari,
@@ -14,7 +15,12 @@ import {
   transactionPelatihTari,
   uploadImagePelatihTari,
 } from "../controllers/pelatihTari.controller.js";
-import { getUserProfile, getUsers } from "../controllers/users.controller.js";
+import {
+  editUserProfile,
+  getUserProfile,
+  getUsers,
+  uploadImageUserProfile,
+} from "../controllers/users.controller.js";
 import { multerStorage } from "../lib/utils/multer.js";
 import { verifyJwt } from "../middleware/index.js";
 import express from "express";
@@ -31,19 +37,30 @@ routes.post(
 );
 routes.post("/api/pelatih-tari/add", addPelatihTari);
 routes.post(
-  "/api/pelatih-tari/upload-image",
+  "/api/pelatih-tari/upload-image/:id",
   multerStorage.single("my_file"),
   uploadImagePelatihTari
 );
-routes.post("/api/users/profile", getUserProfile);
+routes.post(
+  "/api/pelatih-tari/add-image",
+  multerStorage.single("my_file"),
+  addImagePelatihTari
+);
+routes.post(
+  "/api/users/profile/upload-image/:id",
+  multerStorage.single("my_file"),
+  uploadImageUserProfile
+);
 
 routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
+routes.patch("/api/users/profile/edit/:id", editUserProfile);
 
 routes.get("/", getHome);
 routes.get("/api/pelatih-tari", getPelatihTari);
 routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/users", getUsers);
+routes.get("/api/users/profile", getUserProfile);
 
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 

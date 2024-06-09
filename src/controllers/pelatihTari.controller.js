@@ -2,6 +2,7 @@ import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
+  FRONTEND_PRODUCTION_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
 } from "../lib/utils/constants.js";
@@ -13,6 +14,9 @@ import { nanoid } from "nanoid";
 export async function uploadImagePelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
+
+    const { id } = req.params;
+
     if (authHeader) {
       const token = authHeader.split(" ")[1];
       const decodedToken = decode(token);
@@ -28,6 +32,10 @@ export async function uploadImagePelatihTari(req, res) {
         const cloudinaryResponse = await uploadImage(dataURI, "pelatih_tari");
 
         if (cloudinaryResponse) {
+          await pool.query(
+            `UPDATE pelatih_tari SET image = '${cloudinaryResponse.secure_url}' WHERE id = '${id}'`
+          );
+
           res.status(200).json({
             statusCode: 200,
             message: "Success upload image!",
@@ -49,7 +57,52 @@ export async function uploadImagePelatihTari(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Failed to edit data!",
+      message: "Failed to upload image!",
+    });
+  }
+}
+
+export async function addImagePelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      if (
+        decodedToken.email === ADMIN_EMAIL &&
+        decodedToken.password === ADMIN_PASSWORD
+      ) {
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+        const cloudinaryResponse = await uploadImage(dataURI, "pelatih_tari");
+
+        if (cloudinaryResponse) {
+          res.status(200).json({
+            statusCode: 200,
+            message: "Success add image!",
+            data: cloudinaryResponse.secure_url,
+          });
+        } else {
+          res.status(400).json({
+            statusCode: 400,
+            message: "Error while adding image!",
+          });
+        }
+      }
+    } else {
+      res.status(401).json({
+        statusCode: 401,
+        message: "Not Authorized!",
+      });
+    }
+  } catch (err) {
+    res.status(400).json({
+      statusCode: 400,
+      message: "Failed to add image!",
     });
   }
 }
@@ -57,7 +110,7 @@ export async function uploadImagePelatihTari(req, res) {
 export async function addPelatihTari(req, res) {
   try {
     const authHeader = req.headers.authorization;
-    const { email, name, image, no_hp, status, description, price } = req.body;
+    const { email, image, name, no_hp, status, description, price } = req.body;
 
     if (authHeader) {
       const token = authHeader.split(" ")[1];
@@ -98,7 +151,7 @@ export async function editPelatihTari(req, res) {
     const authHeader = req.headers.authorization;
 
     const { id } = req.params;
-    const { email, name, image, no_hp, status, description, price } = req.body;
+    const { email, name, no_hp, status, description, price } = req.body;
 
     if (authHeader) {
       const token = authHeader.split(" ")[1];
@@ -109,7 +162,7 @@ export async function editPelatihTari(req, res) {
         decodedToken.password === ADMIN_PASSWORD
       ) {
         await pool.query(
-          `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', image = '${image}', price = '${price}', status = '${status}' WHERE id = '${id}'`
+          `UPDATE pelatih_tari SET email = '${email}', name = '${name}', no_hp = '${no_hp}', description = '${description}', price = '${price}', status = '${status}' WHERE id = '${id}'`
         );
 
         res.status(200).json({
@@ -250,8 +303,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        // ganti localhost kalo mau up ke production
-        finish: `${"http://localhost:3000"}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 
@@ -304,6 +356,6 @@ export async function getPelatihTari(_, res) {
     if (results.length) {
     }
   } catch (err) {
-    res.status().json({ statusCode: 400, message: "Failed!" });
+    res.status(400).json({ statusCode: 400, message: "Failed!" });
   }
 }*/
