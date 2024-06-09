@@ -3,11 +3,13 @@ import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
   FRONTEND_PRODUCTION_URL,
+  MIDTRANS_API_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
 } from "../lib/utils/constants.js";
 import { decode } from "../lib/utils/jwt.js";
 import { pool } from "../lib/utils/pool.js";
+import axios from "axios";
 import midtransClient from "midtrans-client";
 import { nanoid } from "nanoid";
 
@@ -346,16 +348,27 @@ export async function getPelatihTari(_, res) {
   }
 }
 
-/*export async function userPaymentPelatihTariHandler(req, res) {
+export async function getPaymentStatusPelatihTari(req, res) {
   try {
-    const { email } = req.body;
-    const [results] = await pool.query(
-      `SELECT * FROM user_payment_pelatih_tari`
+    const { order_id } = req.params;
+
+    const response = await axios.get(
+      `${MIDTRANS_API_URL}/v2/${order_id}/status`,
+      {
+        headers: { Authorization: `Basic ${btoa(MIDTRANS_SERVER_KEY)}` },
+      }
     );
 
-    if (results.length) {
+    if (response.status === 200) {
+      res.status(200).send({
+        statusCode: 200,
+        message: "Success get payment status!",
+        data: response.data,
+      });
     }
   } catch (err) {
-    res.status(400).json({ statusCode: 400, message: "Failed!" });
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to get payment status!" });
   }
-}*/
+}

@@ -11,6 +11,7 @@ import {
   deletePelatihTari,
   editPelatihTari,
   getDetailPelatihTari,
+  getPaymentStatusPelatihTari,
   getPelatihTari,
   transactionPelatihTari,
   uploadImagePelatihTari,
@@ -61,7 +62,7 @@ routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/users", getUsers);
 routes.get("/api/users/profile", getUserProfile);
-
+routes.get("/api/pelatih-tari/payment/:order_id", getPaymentStatusPelatihTari);
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;
