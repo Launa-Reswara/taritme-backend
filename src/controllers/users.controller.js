@@ -35,7 +35,7 @@ export async function getUserProfile(req, res) {
       const decodedToken = decode(token);
 
       const [results] = await pool.query(
-        `SELECT users.id, name, email, users_profile.jenis_kelamin, users_profile.bio, users_profile.no_hp, users_profile.age, users_profile.image FROM users LEFT JOIN users_profile ON users.id = users_profile.id WHERE email = '${decodedToken.email}'`
+        `SELECT users.id, name, email, users_profile.jenis_kelamin, users_profile.bio, users_profile.no_hp, users_profile.age, users_profile.image FROM users LEFT JOIN users_profile ON users.id = users_profile.users_id WHERE email = '${decodedToken.email}'`
       );
 
       if (results.length) {
@@ -78,7 +78,7 @@ export async function uploadImageUserProfile(req, res) {
 
       if (cloudinaryResponse) {
         await pool.query(
-          `UPDATE users_profile SET image = '${cloudinaryResponse.secure_url}' WHERE id = '${id}'`
+          `UPDATE users_profile SET image = '${cloudinaryResponse.secure_url}' WHERE users_id = '${id}'`
         );
 
         res.status(200).json({
@@ -115,7 +115,7 @@ export async function editUserProfile(req, res) {
 
     if (authHeader) {
       await pool.query(
-        `UPDATE users_profile JOIN users ON users_profile.users_id = users.id SET users.name = '${name}', no_hp = '${no_hp}', jenis_kelamin = '${jenis_kelamin}', age = '${age}', bio = '${bio}' WHERE users_profile.id = '${id}'`
+        `UPDATE users_profile JOIN users ON users_profile.users_id = users.id SET users.name = '${name}', no_hp = '${no_hp}', jenis_kelamin = '${jenis_kelamin}', age = '${age}', bio = '${bio}' WHERE users_profile.users_id = '${id}'`
       );
 
       res.status(200).json({
