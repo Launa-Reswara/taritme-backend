@@ -1,3 +1,4 @@
+import { normalizeString } from "../lib/helpers/normalizeString.js";
 import { uploadImage } from "../lib/utils/cloudinary.js";
 import { decode } from "../lib/utils/jwt.js";
 import { pool } from "../lib/utils/pool.js";
@@ -132,5 +133,75 @@ export async function editUserProfile(req, res) {
       statusCode: 400,
       message: "Failed to edit pelatih tari!",
     });
+  }
+}
+
+// riwayat kursus
+export async function getRiwayatKursus(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+      const [results] = await pool.query(`SELECT * FROM riwayat_kursus`);
+
+      if (results.length) {
+        res.status(200).json({
+          statusCode: 200,
+          message: "Success to get riwayat kursus!",
+          data: results,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Riwayat kursus is not available!",
+        });
+      }
+    } else {
+      res.status(401).json({
+        statusCode: 401,
+        message: "Not authorized!",
+      });
+    }
+  } catch (err) {
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to get riwayat kursus!" });
+  }
+}
+
+export async function addRiwayatKursus(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    const { pelatih_tari_name, order_id } = req.body;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      const [users] = await pool.query(
+        `SELECT id, name FROM users WHERE email = '${decodedToken.email}'`
+      );
+
+      const [pelatih_tari] = await pool.query(
+        `SELECT * FROM pelatih_tari WHERE name = '${normalizeString(
+          pelatih_tari_name
+        )}'`
+      );
+
+      await pool.query(
+        `INSERT INTO riwayat_kursus (email, pelatih_tari_name, pelatih_tari_image, pelatih_tari_price, pelatih_tari_description, users_id, pelatih_tari_id, order_id) VALUES ('${decodedToken.email}', '${pelatih_tari[0].name}', '${pelatih_tari[0].image}', '${pelatih_tari[0].price}', '${pelatih_tari[0].description}', '${users[0].id}', '${pelatih_tari[0].id}', '${order_id}')`
+      );
+
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success add riwayat kursus!",
+        data: { users: users[0], pelatih_tari: pelatih_tari[0] },
+      });
+    }
+  } catch (err) {
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to add riwayat kursus!" });
   }
 }

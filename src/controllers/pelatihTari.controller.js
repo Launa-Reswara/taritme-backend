@@ -1,8 +1,9 @@
+import { normalizeString } from "../lib/helpers/normalizeString.js";
 import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
-  FRONTEND_PRODUCTION_URL,
+  FRONTEND_DEVELOPMENT_URL,
   MIDTRANS_API_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
@@ -229,13 +230,10 @@ export async function getDetailPelatihTari(req, res) {
   try {
     const name = req.params.name;
 
-    const normalizedName = name
-      .split("-")
-      .map((item) => item[0].toUpperCase() + item.substring(1))
-      .join(" ");
-
     const [results] = await pool.query(
-      `SELECT name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizedName}'`
+      `SELECT pelatih_tari.id, name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizeString(
+        name
+      )}'`
     );
 
     if (results.length) {
@@ -305,7 +303,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        finish: `${FRONTEND_DEVELOPMENT_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 
@@ -350,25 +348,128 @@ export async function getPelatihTari(_, res) {
 
 export async function getPaymentStatusPelatihTari(req, res) {
   try {
+    const authHeader = req.headers.authorization;
+
     const { order_id } = req.params;
 
-    const response = await axios.get(
-      `${MIDTRANS_API_URL}/v2/${order_id}/status`,
-      {
-        headers: { Authorization: `Basic ${btoa(MIDTRANS_SERVER_KEY)}` },
-      }
-    );
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
 
-    if (response.status === 200) {
-      res.status(200).send({
-        statusCode: 200,
-        message: "Success get payment status!",
-        data: response.data,
-      });
+      const response = await axios.get(
+        `${MIDTRANS_API_URL}/v2/${order_id}/status`,
+        {
+          headers: { Authorization: `Basic ${btoa(MIDTRANS_SERVER_KEY)}` },
+        }
+      );
+
+      const [results] = await pool.query(
+        `SELECT * FROM riwayat_kursus WHERE order_id = '${order_id}'`
+      );
+
+      if (results.length === 0) {
+        if (response.status === 200) {
+          res.status(200).json({
+            statusCode: 200,
+            message: "Success get payment status!",
+            data: response.data,
+          });
+        } else {
+          res.status(404).json({
+            statusCode: 404,
+            message: "No payment status available!",
+          });
+        }
+      } else {
+        res.status(401).json({
+          statusCode: 401,
+          message: "You've given review in this transaction before!",
+        });
+      }
+    } else {
+      res.status(401).json({ statusCode: 401, message: "Not authorized!" });
     }
   } catch (err) {
     res
       .status(400)
       .json({ statusCode: 400, message: "Failed to get payment status!" });
+  }
+}
+
+// penilaian pelatih tari
+export async function penilaianPelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    const { pelatih_tari_id, pelatih_tari_name, rating, comment, order_id } =
+      req.body;
+
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      const [results] = await pool.query(
+        `SELECT name FROM users WHERE email = '${decodedToken.email}' LIMIT 1`
+      );
+
+      if (results.length) {
+        await pool.query(
+          `INSERT INTO penilaian_pelatih_tari (pelatih_tari_id, pelatih_tari_name, rating, comment, users_email, users_name, order_id) VALUES ('${pelatih_tari_id}', '${pelatih_tari_name}', '${rating}', '${comment}', '${decodedToken.email}', '${results[0].name}', '${order_id}')`
+        );
+
+        res.status(200).json({
+          statusCode: 200,
+          message: "Success to add penilaian!",
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Your name is not available!",
+        });
+      }
+    } else {
+      res.status(401).json({
+        statusCode: 401,
+        message: "Not authorized!",
+      });
+    }
+  } catch (err) {
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to add penilaian!" });
+  }
+}
+
+export async function getPenilaianPelatihTari(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    const { name } = req.params;
+
+    if (authHeader) {
+      const [results] = await pool.query(
+        `SELECT * FROM penilaian_pelatih_tari WHERE pelatih_tari_name = '${normalizeString(
+          name
+        )}'`
+      );
+
+      if (results.length) {
+        res.status(200).json({
+          statusCode: 200,
+          message: "Success get penilaian pelatih tari!",
+          data: results,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Penilaian pelatih tari is not available!",
+        });
+      }
+    }
+  } catch (err) {
+    res.status(400).json({
+      statusCode: 400,
+      message: "Failed to get penilaian pelatih tari!",
+    });
   }
 }

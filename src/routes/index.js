@@ -13,11 +13,15 @@ import {
   getDetailPelatihTari,
   getPaymentStatusPelatihTari,
   getPelatihTari,
+  getPenilaianPelatihTari,
+  penilaianPelatihTari,
   transactionPelatihTari,
   uploadImagePelatihTari,
 } from "../controllers/pelatihTari.controller.js";
 import {
+  addRiwayatKursus,
   editUserProfile,
+  getRiwayatKursus,
   getUserProfile,
   getUsers,
   uploadImageUserProfile,
@@ -52,10 +56,16 @@ routes.post(
   multerStorage.single("my_file"),
   uploadImageUserProfile
 );
+routes.post("/api/pelatih-tari/:name/penilaian", penilaianPelatihTari);
+routes.post("/api/riwayat-kursus", addRiwayatKursus);
 
 routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
 routes.patch("/api/users/profile/edit/:id", editUserProfile);
 
+routes.get(
+  "/api/pelatih-tari/:name/kumpulan-penilaian",
+  getPenilaianPelatihTari
+);
 routes.get("/", getHome);
 routes.get("/api/pelatih-tari", getPelatihTari);
 routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
@@ -63,6 +73,8 @@ routes.get("/api/komunitas", getKomunitas);
 routes.get("/api/users", getUsers);
 routes.get("/api/users/profile", getUserProfile);
 routes.get("/api/pelatih-tari/payment/:order_id", getPaymentStatusPelatihTari);
+routes.get("/api/riwayat-kursus", getRiwayatKursus);
+
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;
