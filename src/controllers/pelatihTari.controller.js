@@ -1,3 +1,5 @@
+import { formatToSqlDate } from "../lib/helpers/formatToSqlDate.js";
+import { getRatingOrComments } from "../lib/helpers/getRatingOrComments.js";
 import { normalizeString } from "../lib/helpers/normalizeString.js";
 import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
@@ -124,10 +126,9 @@ export async function addPelatihTari(req, res) {
         decodedToken.password === ADMIN_PASSWORD
       ) {
         await pool.query(
-          `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${new Date()
-            .toISOString()
-            .slice(0, 19)
-            .replace("T", " ")}')`
+          `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${formatToSqlDate(
+            new Date()
+          )}')`
         );
 
         res.status(200).json({
@@ -231,7 +232,7 @@ export async function getDetailPelatihTari(req, res) {
     const name = req.params.name;
 
     const [results] = await pool.query(
-      `SELECT pelatih_tari.id, name, image, description, rating, price, total_review, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizeString(
+      `SELECT pelatih_tari.id, name, image, description, price, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizeString(
         name
       )}'`
     );
@@ -327,11 +328,20 @@ export async function getPelatihTari(_, res) {
   try {
     const [results] = await pool.query(`SELECT * FROM pelatih_tari`);
 
-    if (results.length) {
+    const newArr = await Promise.all(
+      results.map(async (item) =>
+        Object.assign(item, {
+          rating: await getRatingOrComments("rating", item.name),
+          total_comments: await getRatingOrComments("comments", item.name),
+        })
+      )
+    );
+
+    if (newArr.length) {
       res.status(200).json({
         statusCode: 200,
         message: "Success get all pelatih tari!",
-        data: results,
+        data: newArr,
       });
     } else {
       res.status(404).json({
@@ -364,7 +374,7 @@ export async function getPaymentStatusPelatihTari(req, res) {
       );
 
       const [results] = await pool.query(
-        `SELECT * FROM riwayat_kursus WHERE order_id = '${order_id}'`
+        `SELECT * FROM penilaian_pelatih_tari WHERE order_id = '${order_id}'`
       );
 
       if (results.length === 0) {
@@ -465,6 +475,11 @@ export async function getPenilaianPelatihTari(req, res) {
           message: "Penilaian pelatih tari is not available!",
         });
       }
+    } else {
+      res.status(401).json({
+        statusCode: 401,
+        message: "Not authorized!",
+      });
     }
   } catch (err) {
     res.status(400).json({

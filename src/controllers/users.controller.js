@@ -1,3 +1,4 @@
+import { getRatingOrComments } from "../lib/helpers/getRatingOrComments.js";
 import { normalizeString } from "../lib/helpers/normalizeString.js";
 import { uploadImage } from "../lib/utils/cloudinary.js";
 import { decode } from "../lib/utils/jwt.js";
@@ -144,11 +145,23 @@ export async function getRiwayatKursus(req, res) {
     if (authHeader) {
       const [results] = await pool.query(`SELECT * FROM riwayat_kursus`);
 
+      const newArr = await Promise.all(
+        results.map(async (item) =>
+          Object.assign(item, {
+            rating: await getRatingOrComments("rating", item.pelatih_tari_name),
+            total_comments: await getRatingOrComments(
+              "comments",
+              item.pelatih_tari_name
+            ),
+          })
+        )
+      );
+
       if (results.length) {
         res.status(200).json({
           statusCode: 200,
           message: "Success to get riwayat kursus!",
-          data: results,
+          data: newArr,
         });
       } else {
         res.status(404).json({
