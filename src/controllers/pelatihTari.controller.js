@@ -126,7 +126,7 @@ export async function addPelatihTari(req, res) {
         decodedToken.password === ADMIN_PASSWORD
       ) {
         await pool.query(
-          `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, rating, total_review, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', 5, 10, '${formatToSqlDate(
+          `INSERT INTO pelatih_tari(email, name, no_hp, description, image, price, status, created_at) VALUES('${email}', '${name}', '${no_hp}', '${description}', '${image}', '${price}', '${status}', '${formatToSqlDate(
             new Date()
           )}')`
         );
@@ -343,10 +343,11 @@ export async function getPelatihTari(_, res) {
         message: "Success get all pelatih tari!",
         data: newArr,
       });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: "No available pelatih tari!",
+    } else if (newArr.length === 0) {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success, but no available pelatih tari!",
+        data: results,
       });
     }
   } catch (err) {

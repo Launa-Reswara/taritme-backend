@@ -6,18 +6,21 @@ import { pool } from "../lib/utils/pool.js";
 
 export async function getUsers(_, res) {
   try {
-    const [results] = await pool.query(`SELECT * FROM users`);
+    const [results] = await pool.query(
+      `SELECT users.id, users.name, users.email, users.is_already_paid, users_profile.jenis_kelamin, users_profile.bio, users_profile.no_hp, users_profile.image FROM users LEFT JOIN users_profile ON users.id = users_profile.users_id`
+    );
 
     if (results.length) {
       res.status(200).json({
         statusCode: 200,
-        message: "Success get all pelatih tari!",
+        message: "Success get all users!",
         data: results,
       });
-    } else {
-      res.status(404).json({
-        statusCode: 404,
-        message: "No available users!",
+    } else if (results.length === 0) {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success, but no available users!",
+        data: results,
       });
     }
   } catch (err) {
@@ -132,7 +135,7 @@ export async function editUserProfile(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Failed to edit pelatih tari!",
+      message: "Failed to edit users profile!",
     });
   }
 }
@@ -200,6 +203,10 @@ export async function addRiwayatKursus(req, res) {
         `SELECT * FROM pelatih_tari WHERE name = '${normalizeString(
           pelatih_tari_name
         )}'`
+      );
+
+      await pool.query(
+        `UPDATE users SET is_already_paid = 1 WHERE email = '${decodedToken.email}'`
       );
 
       await pool.query(
