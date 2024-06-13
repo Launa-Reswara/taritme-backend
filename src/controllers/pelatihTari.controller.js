@@ -9,6 +9,7 @@ import {
   MIDTRANS_API_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
+  PRODUCTION_URL,
 } from "../lib/utils/constants.js";
 import { decode } from "../lib/utils/jwt.js";
 import { pool } from "../lib/utils/pool.js";
@@ -232,12 +233,21 @@ export async function getDetailPelatihTari(req, res) {
     const name = req.params.name;
 
     const [results] = await pool.query(
-      `SELECT pelatih_tari.id, name, image, description, price, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3, detail_pelatih_tari.price_per_paket FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizeString(
+      `SELECT pelatih_tari.id, name, image, description, price, detail_pelatih_tari.tentang_pelatih, detail_pelatih_tari.image_1, detail_pelatih_tari.image_2, detail_pelatih_tari.image_3 FROM pelatih_tari LEFT JOIN detail_pelatih_tari ON pelatih_tari.id = detail_pelatih_tari.pelatih_tari_id WHERE name = '${normalizeString(
         name
       )}'`
     );
 
-    if (results.length) {
+    const newArr = await Promise.all(
+      results.map(async (item) =>
+        Object.assign(item, {
+          rating: await getRatingOrComments("rating", item.name),
+          total_comments: await getRatingOrComments("comments", item.name),
+        })
+      )
+    );
+
+    if (newArr.length) {
       res.status(200).json({
         statusCode: 200,
         message: "Success get detail pelatih tari!",
@@ -304,7 +314,11 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        finish: `${FRONTEND_DEVELOPMENT_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        finish: `${
+          process.env.NODE_ENV === "development"
+            ? FRONTEND_DEVELOPMENT_URL
+            : PRODUCTION_URL
+        }/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 
@@ -343,11 +357,10 @@ export async function getPelatihTari(_, res) {
         message: "Success get all pelatih tari!",
         data: newArr,
       });
-    } else if (newArr.length === 0) {
-      res.status(200).json({
-        statusCode: 200,
-        message: "Success, but no available pelatih tari!",
-        data: results,
+    } else {
+      res.status(404).json({
+        statusCode: 404,
+        message: "No available detail pelatih tari!",
       });
     }
   } catch (err) {
@@ -464,18 +477,11 @@ export async function getPenilaianPelatihTari(req, res) {
         )}'`
       );
 
-      if (results.length) {
-        res.status(200).json({
-          statusCode: 200,
-          message: "Success get penilaian pelatih tari!",
-          data: results,
-        });
-      } else {
-        res.status(404).json({
-          statusCode: 404,
-          message: "Penilaian pelatih tari is not available!",
-        });
-      }
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success get penilaian pelatih tari!",
+        data: results,
+      });
     } else {
       res.status(401).json({
         statusCode: 401,
