@@ -32,6 +32,7 @@ import express from "express";
 
 const routes = express.Router();
 
+// POST
 routes.post("/api/auth/login", loginUserAccount);
 routes.post("/api/auth/login/admin", loginAdmin);
 routes.post("/api/auth/registration", registrationUserAccount);
@@ -59,9 +60,11 @@ routes.post(
 routes.post("/api/pelatih-tari/:name/penilaian", penilaianPelatihTari);
 routes.post("/api/riwayat-kursus", addRiwayatKursus);
 
+// PATCH
 routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
 routes.patch("/api/users/profile/edit/:id", editUserProfile);
 
+// GET
 routes.get(
   "/api/pelatih-tari/:name/kumpulan-penilaian",
   getPenilaianPelatihTari
@@ -75,6 +78,7 @@ routes.get("/api/users/profile", getUserProfile);
 routes.get("/api/pelatih-tari/payment/:order_id", getPaymentStatusPelatihTari);
 routes.get("/api/riwayat-kursus", getRiwayatKursus);
 
+// DELETE
 routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;
