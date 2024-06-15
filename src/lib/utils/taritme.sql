@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 13, 2024 at 10:49 PM
+-- Generation Time: Jun 13, 2024 at 11:53 PM
 -- Server version: 8.0.37
 -- PHP Version: 8.2.19
 
@@ -11,16 +11,10 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Database: `taritme`
 --
-CREATE DATABASE IF NOT EXISTS `taritme` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `taritme` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `taritme`;
 
 -- --------------------------------------------------------
@@ -34,10 +28,24 @@ CREATE TABLE `detail_pelatih_tari` (
   `id` int NOT NULL,
   `pelatih_tari_id` int NOT NULL,
   `tentang_pelatih` text NOT NULL,
-  `image_1` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `image_2` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `image_1` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `image_2` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `image_3` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `detail_pelatih_tari`
+--
+
+DROP TABLE IF EXISTS `detail_pelatih_tari`;
+CREATE TABLE `detail_pelatih_tari` (
+  `id` int NOT NULL,
+  `pelatih_tari_id` int NOT NULL,
+  `tentang_pelatih` text NOT NULL,
+  `image_1` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `image_2` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `image_3` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `detail_pelatih_tari`
@@ -63,10 +71,10 @@ CREATE TABLE `komunitas` (
   `id` int NOT NULL,
   `image` varchar(150) DEFAULT NULL,
   `name` varchar(50) NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `komunitas`
@@ -94,7 +102,7 @@ CREATE TABLE `komunitas_link_socialmedia` (
   `twitter` varchar(100) DEFAULT NULL,
   `whatsapp` varchar(100) DEFAULT NULL,
   `komunitas_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -109,11 +117,11 @@ CREATE TABLE `pelatih_tari` (
   `name` varchar(50) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
   `description` text NOT NULL,
-  `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `image` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `price` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `status` enum('Aktif','Tidak Aktif') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `pelatih_tari`
@@ -144,7 +152,7 @@ CREATE TABLE `penilaian_pelatih_tari` (
   `users_email` varchar(100) NOT NULL,
   `users_name` varchar(100) NOT NULL,
   `order_id` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `penilaian_pelatih_tari`
@@ -164,14 +172,14 @@ DROP TABLE IF EXISTS `riwayat_kursus`;
 CREATE TABLE `riwayat_kursus` (
   `id` int NOT NULL,
   `email` varchar(50) NOT NULL,
-  `pelatih_tari_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `pelatih_tari_image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `pelatih_tari_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `pelatih_tari_image` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `pelatih_tari_price` int NOT NULL,
-  `pelatih_tari_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `pelatih_tari_description` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `users_id` int NOT NULL,
   `pelatih_tari_id` int NOT NULL,
   `order_id` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `riwayat_kursus`
@@ -190,11 +198,11 @@ INSERT INTO `riwayat_kursus` (`id`, `email`, `pelatih_tari_name`, `pelatih_tari_
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `is_already_paid` tinyint NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -213,12 +221,12 @@ DROP TABLE IF EXISTS `users_profile`;
 CREATE TABLE `users_profile` (
   `id` int NOT NULL,
   `users_id` int NOT NULL,
-  `jenis_kelamin` enum('Laki-laki','Perempuan') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `bio` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `jenis_kelamin` enum('Laki-laki','Perempuan') CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `bio` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   `no_hp` varchar(20) DEFAULT NULL,
   `age` int DEFAULT NULL,
-  `image` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'https://via.placeholder.com/150'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `image` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'https://via.placeholder.com/150'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users_profile`
@@ -372,7 +380,3 @@ ALTER TABLE `riwayat_kursus`
 ALTER TABLE `users_profile`
   ADD CONSTRAINT `users_profile_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
