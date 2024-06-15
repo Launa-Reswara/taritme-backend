@@ -314,11 +314,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        finish: `${
-          process.env.NODE_ENV === "development"
-            ? FRONTEND_DEVELOPMENT_URL
-            : PRODUCTION_URL
-        }/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        finish: `${PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 
