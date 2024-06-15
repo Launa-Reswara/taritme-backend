@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 11, 2024 at 04:26 AM
+-- Generation Time: Jun 13, 2024 at 10:49 PM
 -- Server version: 8.0.37
 -- PHP Version: 8.2.19
 
@@ -36,16 +36,21 @@ CREATE TABLE `detail_pelatih_tari` (
   `tentang_pelatih` text NOT NULL,
   `image_1` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `image_2` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `image_3` text,
-  `price_per_paket` int NOT NULL
+  `image_3` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `detail_pelatih_tari`
 --
 
-INSERT INTO `detail_pelatih_tari` (`id`, `pelatih_tari_id`, `tentang_pelatih`, `image_1`, `image_2`, `image_3`, `price_per_paket`) VALUES
-(1, 1, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/detail_pelatih_tari/luna_maya/hg00wv5higbam7pa6eqp', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/detail_pelatih_tari/luna_maya/yrdnorwl29gwfj6khycb', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/detail_pelatih_tari/luna_maya/us9ug8msldhqxcd8o9b7', 450000);
+INSERT INTO `detail_pelatih_tari` (`id`, `pelatih_tari_id`, `tentang_pelatih`, `image_1`, `image_2`, `image_3`) VALUES
+(1, 1, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL),
+(2, 2, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL),
+(3, 3, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL),
+(4, 4, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL),
+(5, 5, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1718272415/taritme/pelatih_tari/detail_pelatih_tari/rina_ayu/pnntsbwfoj3bwbn2gbq6.png', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1718272415/taritme/pelatih_tari/detail_pelatih_tari/rina_ayu/eczo3uwjbdq5dshcpd0g.png', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1718272415/taritme/pelatih_tari/detail_pelatih_tari/rina_ayu/z6ejvqq660z5jreczj8m.png'),
+(6, 6, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL),
+(7, 7, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -105,10 +110,8 @@ CREATE TABLE `pelatih_tari` (
   `no_hp` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `image` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `rating` decimal(10,0) DEFAULT NULL,
   `price` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `total_review` int NOT NULL,
   `status` enum('Aktif','Tidak Aktif') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -116,13 +119,14 @@ CREATE TABLE `pelatih_tari` (
 -- Dumping data for table `pelatih_tari`
 --
 
-INSERT INTO `pelatih_tari` (`id`, `email`, `name`, `no_hp`, `description`, `image`, `rating`, `price`, `created_at`, `total_review`, `status`) VALUES
-(1, 'luna@lunamaya.com', 'Luna Maya', '081234567890', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717355540/taritme/pelatih_tari/vs1wjlv7raij2kq4zr7f.png', 5, 100000, '2024-05-27 15:40:14', 10, 'Aktif'),
-(3, 'ayubulan@trisna.com', 'Ayu Bulantrisna', '084561237893', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717386240/taritme/pelatih_tari/zoxxmklixm1kozhtwguf.png', 5, 100000, '2024-05-27 20:55:35', 10, 'Aktif'),
-(4, 'sandrina@sandrina.com', 'Sandrina', '082347861029', 'Instruktur tari Sumatra Barat yang memberikan ilmu nya melalui kursus tari.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717386835/taritme/pelatih_tari/jpu1qtureum3jleq33ff.png', 5, 100000, '2024-05-27 20:55:46', 10, 'Aktif'),
-(5, 'soim@soimah.com', 'Soimah', '089012465234', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717386921/taritme/pelatih_tari/orht1d2an5g6th0htio7.png', 5, 100000, '2024-05-27 20:56:00', 10, 'Aktif'),
-(6, 'lena@guslina.com', 'Lena Guslina', '080987654321', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717385114/taritme/pelatih_tari/utg8v6veyzqpjmdb73bm.png', 5, 100000, '2024-06-02 20:25:08', 10, 'Aktif'),
-(7, 'agnezmo@agnez.com', 'Agnez Mo', '089871234561', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717386033/taritme/pelatih_tari/ihrim21n2wzctgx8uuly.png', 5, 100000, '2024-06-02 20:40:27', 10, 'Aktif');
+INSERT INTO `pelatih_tari` (`id`, `email`, `name`, `no_hp`, `description`, `image`, `price`, `created_at`, `status`) VALUES
+(1, 'tika@wulandari.com', 'Tika Wulandari', '081234567098', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/uellvmumwswlixir1vbh', 150000, '2024-06-11 21:54:06', 'Aktif'),
+(2, 'siti@rahayu.com', 'Siti Rahayu', '080987654321', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/olfxidggiyah97mukttm', 100000, '2024-06-12 13:25:03', 'Aktif'),
+(3, 'maya@indah.com', 'Maya Indah', '123456789010', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/r9gckk3phjlxinswcocn', 100000, '2024-06-12 13:26:40', 'Aktif'),
+(4, 'sari@nadia.com', 'Nadia Sari', '291038475647', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/znb0pkxlahfztduvsqnk', 150000, '2024-06-12 13:27:23', 'Aktif'),
+(5, 'ayu@ayu.app', 'Rina Ayu', '092315679675', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/jin7hkfwglolp9sunl88', 100000, '2024-06-12 13:28:25', 'Aktif'),
+(6, 'putri@alya.dev', 'Alya Putri', '124234122535', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/zojabharmftekwg6feev', 200000, '2024-06-12 13:29:10', 'Aktif'),
+(7, 'lestari@lestari.com', 'Dewi Lestari', '243523592512', 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/deujljl1f4odhxriornp', 100000, '2024-06-12 13:29:56', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -147,7 +151,8 @@ CREATE TABLE `penilaian_pelatih_tari` (
 --
 
 INSERT INTO `penilaian_pelatih_tari` (`id`, `pelatih_tari_id`, `pelatih_tari_name`, `rating`, `comment`, `users_email`, `users_name`, `order_id`) VALUES
-(1, 1, 'Luna Maya', 5, 'Bagus pengajarannya kak Luna Maya', 'yui@yui.app', 'Katou Megumi', 'TRM-ITEM-85XECWnK_f');
+(1, 5, 'Rina Ayu', 5, 'Bagus pengajarannya', 'yui@yui.app', 'Katou Megumi', 'TRM-ITEM-Yn6dI2C17G'),
+(2, 2, 'Siti Rahayu', 5, 'Penjelasan kak Siti mudah dimengerti :)', 'yui@yui.app', 'Sawamura Eriri Spencer', 'TRM-ITEM-iF0Yzt03qZ');
 
 -- --------------------------------------------------------
 
@@ -168,6 +173,14 @@ CREATE TABLE `riwayat_kursus` (
   `order_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `riwayat_kursus`
+--
+
+INSERT INTO `riwayat_kursus` (`id`, `email`, `pelatih_tari_name`, `pelatih_tari_image`, `pelatih_tari_price`, `pelatih_tari_description`, `users_id`, `pelatih_tari_id`, `order_id`) VALUES
+(1, 'yui@yui.app', 'Rina Ayu', 'https://res.cloudinary.com/da0dcs88v/image/upload/v1718224109/taritme/pelatih_tari/vyaclw5tehnxcmn6ysiv.png', 100000, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 1, 5, 'TRM-ITEM-Yn6dI2C17G'),
+(4, 'yui@yui.app', 'Siti Rahayu', 'https://res.cloudinary.com/da0dcs88v/image/upload/f_auto,q_auto/v1/taritme/pelatih_tari/olfxidggiyah97mukttm', 100000, 'Seorang pelatih tari berpengalaman yang telah mengajar seni tari selama lebih dari lima tahun, memiliki keahlian dalam menari berbagai jenis tarian, termasuk tarian daerah Sumatera Barat.', 1, 2, 'TRM-ITEM-iF0Yzt03qZ');
+
 -- --------------------------------------------------------
 
 --
@@ -179,16 +192,16 @@ CREATE TABLE `users` (
   `id` int NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `is_already_paid` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'Katou Megumi', 'yui@yui.app', '$2b$10$5QfQMtJ22.eS5XJidCeCtOqF3uG8nY1WJu6kgs6ERMH.4.mTlQ9YO'),
-(4, 'Yui Hirasawa', 'hirasawa@sawa.dev', '$2b$10$Iq6OFJplTMxB6UxPDE5TTOVL5/x8FsMUeaWZGtZ7MgUb3O3cIzj4u');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `is_already_paid`) VALUES
+(1, 'Sawamura Eriri Spencer', 'yui@yui.app', '$2b$10$5QfQMtJ22.eS5XJidCeCtOqF3uG8nY1WJu6kgs6ERMH.4.mTlQ9YO', 1);
 
 -- --------------------------------------------------------
 
@@ -212,8 +225,7 @@ CREATE TABLE `users_profile` (
 --
 
 INSERT INTO `users_profile` (`id`, `users_id`, `jenis_kelamin`, `bio`, `no_hp`, `age`, `image`) VALUES
-(1, 1, 'Perempuan', 'sfdfjk', '081234567890', 20, 'https://res.cloudinary.com/da0dcs88v/image/upload/v1717857521/taritme/users_profile/qur0plr7vkq1z4vk9sh0.jpg'),
-(2, 4, NULL, NULL, NULL, NULL, 'https://via.placeholder.com/150');
+(1, 1, 'Perempuan', 'Digital Artist', '081234567890', 20, 'https://res.cloudinary.com/da0dcs88v/image/upload/v1718273797/taritme/users_profile/kskzrlgrx6mxu1lywtmm.jpg');
 
 --
 -- Indexes for dumped tables
@@ -281,7 +293,7 @@ ALTER TABLE `users_profile`
 -- AUTO_INCREMENT for table `detail_pelatih_tari`
 --
 ALTER TABLE `detail_pelatih_tari`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `komunitas`
@@ -299,31 +311,31 @@ ALTER TABLE `komunitas_link_socialmedia`
 -- AUTO_INCREMENT for table `pelatih_tari`
 --
 ALTER TABLE `pelatih_tari`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `penilaian_pelatih_tari`
 --
 ALTER TABLE `penilaian_pelatih_tari`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `riwayat_kursus`
 --
 ALTER TABLE `riwayat_kursus`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users_profile`
 --
 ALTER TABLE `users_profile`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

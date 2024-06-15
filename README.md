@@ -5,54 +5,39 @@
 
 ## Status
 
-Under heavy development!
+Deployment process!
 
 ## Documentation of API
 
-- **POST** `/api/auth/login`
-
-  Login as User request. Will match correct email and password from DB.
-
-- **POST** `/api/auth/login/admin`
-
-  Login as Admin request. Will match correct email and password. The admin is only one.
-
-- **POST** `/api/auth/registration`
-
-  Register user account.
-
-- **POST** `/api/pelatih-tari/:name/transactions`
-
-- **POST** `/api/pelatih-tari/upload-image`
-
-- **GET** `/api/pelatih-tari`
-
-  Get a list of all pelatih tari.
-
-- **GET** `/api/pelatih-tari/:name`
-
-  Get pelatih tari by its name.
-
-- **GET** `/api/komunitas`
-
-  Get a list of all komunitas.
-
-- **GET** `/api/users`
-
-  Get all users.
-
-- **PATCH** `/api/pelatih-tari/edit/:name`
-
-  Edit pelatih tari data by its name.
+| Endpoint                               | Method | Description                                                                           |
+| -------------------------------------- | ------ | ------------------------------------------------------------------------------------- |
+| `/api/auth/login`                      | POST   | Login as User request. Will match correct email and password from DB.                 |
+| `/api/auth/login/admin`                | POST   | Login as Admin request. Will match correct email and password. The admin is only one. |
+| `/api/pelatih-tari/:name/transactions` | POST   | Pelatih tari transactions.                                                            |
+| `/api/pelatih-tari/add`                | POST   | Add new pelatih tari data.                                                            |
+| `/api/pelatih-tari/upload-image/:id`   | POST   | Edit image pelatih tari based on id.                                                  |
+| `/api/pelatih-tari/add-image`          | POST   | Add new pelatih tari image                                                            |
+| `/api/users/profile/upload-image/:id`  | POST   | Edit users profile image based on id.                                                 |
+| `/api/pelatih-tari/:name/penilaian`    | POST   | Add penilaian pelatih tari based on name.                                             |
+| `/api/riwayat-kursus`                  | POST   | Add new riwayat kursus data.                                                          |
+| `/api/pelatih-tari`                    | GET    | Get available pelatih tari.                                                           |
+| `/api/pelatih-tari/:name`              | GET    | Get available pelatih tari by name.                                                   |
+| `/api/komunitas`                       | GET    | Get available komunitas.                                                              |
+| `/api/users`                           | GET    | Get available users.                                                                  |
+| `/api/pelatih-tari/edit/:id`           | PATCH  | Edit pelatih tari based on id.                                                        | 
+| `/api/users/profile/edit/:id`          | PATCH  | Edit users profile based on id                                                        | 
+| `/api/pelatih-tari/delete/:id`         | DELETE | Delete pelatih tari based on id.                                                      |
 
 ## Tech Stack
 
 - Express JS
 - MySQL
+- Cloudinary
+- Midtrans
 
 ## Getting Started
 
 - Clone repo ini.
 - Masuk ke folder project, kemudian ketikkan `npm install` untuk menginstall semua dependencies yang diperlukan.
 - Setelah itu, ketik `npm run dev` untuk menjalankan project. Backend akan diserve di `http://localhost:5000` .
-- Jika ingin mengetes project ini dengan Docker, silahkan pastikan Docker telah terinstall, dan ketik `docker compose up --build`.
+- Jika ingin build project ini dengan Docker, silahkan pastikan Docker telah terinstall, dan ketik `docker compose up --build`.
