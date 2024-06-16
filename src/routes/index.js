@@ -29,56 +29,60 @@ import {
 import { multerStorage } from "../lib/utils/multer.js";
 import { verifyJwt } from "../middleware/index.js";
 import express from "express";
+import passport from "passport";
 
 const routes = express.Router();
 
 // POST
-routes.post("/api/auth/login", loginUserAccount);
-routes.post("/api/auth/login/admin", loginAdmin);
-routes.post("/api/auth/registration", registrationUserAccount);
+routes.post("/api/v1/auth/login", loginUserAccount);
+routes.post("/api/v1/auth/login/admin", loginAdmin);
+routes.post("/api/v1/auth/registration", registrationUserAccount);
 routes.post(
-  "/api/pelatih-tari/:name/transactions",
+  "/api/v1/pelatih-tari/:name/transactions",
   verifyJwt,
   transactionPelatihTari
 );
-routes.post("/api/pelatih-tari/add", addPelatihTari);
+routes.post("/api/v1/pelatih-tari/add", addPelatihTari);
 routes.post(
-  "/api/pelatih-tari/upload-image/:id",
+  "/api/v1/pelatih-tari/upload-image/:id",
   multerStorage.single("my_file"),
   uploadImagePelatihTari
 );
 routes.post(
-  "/api/pelatih-tari/add-image",
+  "/api/v1/pelatih-tari/add-image",
   multerStorage.single("my_file"),
   addImagePelatihTari
 );
 routes.post(
-  "/api/users/profile/upload-image/:id",
+  "/api/v1/users/profile/upload-image/:id",
   multerStorage.single("my_file"),
   uploadImageUserProfile
 );
-routes.post("/api/pelatih-tari/:name/penilaian", penilaianPelatihTari);
-routes.post("/api/riwayat-kursus", addRiwayatKursus);
+routes.post("/api/v1/pelatih-tari/:name/penilaian", penilaianPelatihTari);
+routes.post("/api/v1/riwayat-kursus", addRiwayatKursus);
 
 // PATCH
-routes.patch("/api/pelatih-tari/edit/:id", editPelatihTari);
-routes.patch("/api/users/profile/edit/:id", editUserProfile);
+routes.patch("/api/v1/pelatih-tari/edit/:id", editPelatihTari);
+routes.patch("/api/v1/users/profile/edit/:id", editUserProfile);
 
 // GET
 routes.get(
-  "/api/pelatih-tari/:name/kumpulan-penilaian",
+  "/api/v1/pelatih-tari/:name/kumpulan-penilaian",
   getPenilaianPelatihTari
 );
 routes.get("/", getHome);
-routes.get("/api/pelatih-tari", getPelatihTari);
-routes.get("/api/pelatih-tari/:name", getDetailPelatihTari);
-routes.get("/api/komunitas", getKomunitas);
-routes.get("/api/users", getUsers);
-routes.get("/api/users/profile", getUserProfile);
-routes.get("/api/pelatih-tari/payment/:order_id", getPaymentStatusPelatihTari);
-routes.get("/api/riwayat-kursus", getRiwayatKursus);
+routes.get("/api/v1/pelatih-tari", getPelatihTari);
+routes.get("/api/v1/pelatih-tari/:name", getDetailPelatihTari);
+routes.get("/api/v1/komunitas", getKomunitas);
+routes.get("/api/v1/users", getUsers);
+routes.get("/api/v1/users/profile", getUserProfile);
+routes.get(
+  "/api/v1/pelatih-tari/payment/:order_id",
+  getPaymentStatusPelatihTari
+);
+routes.get("/api/v1/riwayat-kursus", getRiwayatKursus);
 
 // DELETE
-routes.delete("/api/pelatih-tari/delete/:id", deletePelatihTari);
+routes.delete("/api/v1/pelatih-tari/delete/:id", deletePelatihTari);
 
 export default routes;

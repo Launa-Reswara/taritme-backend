@@ -9,24 +9,24 @@ Deployment process!
 
 ## Documentation of API
 
-| Endpoint                               | Method | Description                                                                           |
-| -------------------------------------- | ------ | ------------------------------------------------------------------------------------- |
-| `/api/auth/login`                      | POST   | Login as User request. Will match correct email and password from DB.                 |
-| `/api/auth/login/admin`                | POST   | Login as Admin request. Will match correct email and password. The admin is only one. |
-| `/api/pelatih-tari/:name/transactions` | POST   | Pelatih tari transactions.                                                            |
-| `/api/pelatih-tari/add`                | POST   | Add new pelatih tari data.                                                            |
-| `/api/pelatih-tari/upload-image/:id`   | POST   | Edit image pelatih tari based on id.                                                  |
-| `/api/pelatih-tari/add-image`          | POST   | Add new pelatih tari image                                                            |
-| `/api/users/profile/upload-image/:id`  | POST   | Edit users profile image based on id.                                                 |
-| `/api/pelatih-tari/:name/penilaian`    | POST   | Add penilaian pelatih tari based on name.                                             |
-| `/api/riwayat-kursus`                  | POST   | Add new riwayat kursus data.                                                          |
-| `/api/pelatih-tari`                    | GET    | Get available pelatih tari.                                                           |
-| `/api/pelatih-tari/:name`              | GET    | Get available pelatih tari by name.                                                   |
-| `/api/komunitas`                       | GET    | Get available komunitas.                                                              |
-| `/api/users`                           | GET    | Get available users.                                                                  |
-| `/api/pelatih-tari/edit/:id`           | PATCH  | Edit pelatih tari based on id.                                                        | 
-| `/api/users/profile/edit/:id`          | PATCH  | Edit users profile based on id                                                        | 
-| `/api/pelatih-tari/delete/:id`         | DELETE | Delete pelatih tari based on id.                                                      |
+| Endpoint                                  | Method | Description                                                                           |
+| ----------------------------------------- | ------ | ------------------------------------------------------------------------------------- |
+| `/api/v1/auth/login`                      | POST   | Login as User request. Will match correct email and password from DB.                 |
+| `/api/v1/auth/login/admin`                | POST   | Login as Admin request. Will match correct email and password. The admin is only one. |
+| `/api/v1/pelatih-tari/:name/transactions` | POST   | Pelatih tari transactions.                                                            |
+| `/api/v1/pelatih-tari/add`                | POST   | Add new pelatih tari data.                                                            |
+| `/api/v1/pelatih-tari/upload-image/:id`   | POST   | Edit image pelatih tari based on id.                                                  |
+| `/api/v1/pelatih-tari/add-image`          | POST   | Add new pelatih tari image                                                            |
+| `/api/v1/users/profile/upload-image/:id`  | POST   | Edit users profile image based on id.                                                 |
+| `/api/v1/pelatih-tari/:name/penilaian`    | POST   | Add penilaian pelatih tari based on name.                                             |
+| `/api/v1/riwayat-kursus`                  | POST   | Add new riwayat kursus data.                                                          |
+| `/api/v1/pelatih-tari`                    | GET    | Get available pelatih tari.                                                           |
+| `/api/v1/pelatih-tari/:name`              | GET    | Get available pelatih tari by name.                                                   |
+| `/api/v1/komunitas`                       | GET    | Get available komunitas.                                                              |
+| `/api/v1/users`                           | GET    | Get available users.                                                                  |
+| `/api/v1/pelatih-tari/edit/:id`           | PATCH  | Edit pelatih tari based on id.                                                        |
+| `/api/v1/users/profile/edit/:id`          | PATCH  | Edit users profile based on id                                                        |
+| `/api/v1/pelatih-tari/delete/:id`         | DELETE | Delete pelatih tari based on id.                                                      |
 
 ## Tech Stack
 

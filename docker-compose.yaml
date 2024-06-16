@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: taritme-backend
+    restart: always # always start docker after reboot or fresh start VPS
     ports:
       - "5000:5000"
     volumes:
