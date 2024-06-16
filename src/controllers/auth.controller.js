@@ -2,7 +2,6 @@ import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../lib/utils/constants.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 import { pool } from "../lib/utils/pool.js";
-import passport from "passport";
 
 export async function loginUserAccount(req, res) {
   try {
