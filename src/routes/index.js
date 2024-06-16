@@ -29,7 +29,6 @@ import {
 import { multerStorage } from "../lib/utils/multer.js";
 import { verifyJwt } from "../middleware/index.js";
 import express from "express";
-import passport from "passport";
 
 const routes = express.Router();
 
