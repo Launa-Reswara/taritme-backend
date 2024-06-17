@@ -67,7 +67,7 @@ export async function registrationUserAccount(req, res) {
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
       });
-    } else if (results.length) {
+    } else if (results.length || payload.email === ADMIN_EMAIL) {
       res.status(401).json({
         statusCode: 401,
         message:
