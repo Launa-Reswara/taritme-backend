@@ -58,11 +58,11 @@ routes.post(
   uploadImageUserProfile
 );
 routes.post("/api/v1/pelatih-tari/:name/penilaian", penilaianPelatihTari);
-routes.post("/api/v1/riwayat-kursus", addRiwayatKursus);
+routes.post("/api/v1/riwayat-kursus", verifyJwt, addRiwayatKursus);
 
 // PATCH
-routes.patch("/api/v1/pelatih-tari/edit/:id", editPelatihTari);
-routes.patch("/api/v1/users/profile/edit/:id", editUserProfile);
+routes.patch("/api/v1/pelatih-tari/edit/:id", verifyJwt, editPelatihTari);
+routes.patch("/api/v1/users/profile/edit/:id", verifyJwt, editUserProfile);
 
 // GET
 routes.get(
@@ -74,14 +74,15 @@ routes.get("/api/v1/pelatih-tari", getPelatihTari);
 routes.get("/api/v1/pelatih-tari/:name", getDetailPelatihTari);
 routes.get("/api/v1/komunitas", getKomunitas);
 routes.get("/api/v1/users", getUsers);
-routes.get("/api/v1/users/profile", getUserProfile);
+routes.get("/api/v1/users/profile", verifyJwt, getUserProfile);
 routes.get(
   "/api/v1/pelatih-tari/payment/:order_id",
+  verifyJwt,
   getPaymentStatusPelatihTari
 );
-routes.get("/api/v1/riwayat-kursus", getRiwayatKursus);
+routes.get("/api/v1/riwayat-kursus", verifyJwt, getRiwayatKursus);
 
 // DELETE
-routes.delete("/api/v1/pelatih-tari/delete/:id", deletePelatihTari);
+routes.delete("/api/v1/pelatih-tari/delete/:id", verifyJwt, deletePelatihTari);
 
 export default routes;
