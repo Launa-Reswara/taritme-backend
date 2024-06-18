@@ -45,7 +45,7 @@ export async function loginUserAccount(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Login gagal!",
+      message: "Login gagal, silahkan coba lagi!",
     });
   }
 }
@@ -132,7 +132,7 @@ export async function loginAdmin(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Login sebagai admin gagal!",
+      message: "Login sebagai admin gagal, silahkan coba lagi!",
     });
   }
 }
