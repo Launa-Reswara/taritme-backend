@@ -20,6 +20,7 @@ import {
 } from "../controllers/pelatihTari.controller.js";
 import {
   addRiwayatKursus,
+  deleteUserAccount,
   editUserProfile,
   getRiwayatKursus,
   getUserProfile,
@@ -84,5 +85,6 @@ routes.get("/api/v1/riwayat-kursus", verifyJwt, getRiwayatKursus);
 
 // DELETE
 routes.delete("/api/v1/pelatih-tari/delete/:id", verifyJwt, deletePelatihTari);
+routes.delete("/api/v1/users/delete/:id", verifyJwt, deleteUserAccount);
 
 export default routes;
