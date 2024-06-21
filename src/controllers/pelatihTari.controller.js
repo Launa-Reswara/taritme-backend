@@ -5,11 +5,10 @@ import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
-  FRONTEND_DEVELOPMENT_URL,
+  FRONTEND_PRODUCTION_URL,
   MIDTRANS_API_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
-  PRODUCTION_URL,
 } from "../lib/utils/constants.js";
 import { decode } from "../lib/utils/jwt.js";
 import { pool } from "../lib/utils/pool.js";
@@ -314,7 +313,7 @@ export async function transactionPelatihTari(req, res) {
         },
       },
       callbacks: {
-        finish: `${PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
       },
     };
 

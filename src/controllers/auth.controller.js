@@ -45,7 +45,7 @@ export async function loginUserAccount(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Login gagal!",
+      message: "Login gagal, silahkan coba lagi!",
     });
   }
 }
@@ -67,7 +67,7 @@ export async function registrationUserAccount(req, res) {
         statusCode: 401,
         message: "Registrasi akun gagal, data yang dimasukkan belum lengkap!",
       });
-    } else if (results.length) {
+    } else if (results.length || payload.email === ADMIN_EMAIL) {
       res.status(401).json({
         statusCode: 401,
         message:
@@ -132,7 +132,7 @@ export async function loginAdmin(req, res) {
   } catch (err) {
     res.status(400).json({
       statusCode: 400,
-      message: "Login sebagai admin gagal!",
+      message: "Login sebagai admin gagal, silahkan coba lagi!",
     });
   }
 }

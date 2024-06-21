@@ -225,3 +225,20 @@ export async function addRiwayatKursus(req, res) {
       .json({ statusCode: 400, message: "Failed to add riwayat kursus!" });
   }
 }
+
+export async function deleteUserAccount(req, res) {
+  try {
+    const { id } = req.params;
+
+    await pool.query(`DELETE FROM users WHERE id = '${id}'`);
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Success to delete user account!",
+    });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ statusCode: 400, message: "Failed to delete user account!" });
+  }
+}

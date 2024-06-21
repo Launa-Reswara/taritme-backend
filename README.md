@@ -3,10 +3,6 @@
   <p>Backend side for Taritme</p>
 </div>
 
-## Status
-
-Deployment process!
-
 ## Documentation of API
 
 | Endpoint                                  | Method | Description                                                                           |
