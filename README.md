@@ -3,6 +3,11 @@
   <p>Backend side for Taritme</p>
 </div>
 
+
+## Database Design
+
+![database design](./public/docs/Screenshot%20from%202024-06-23%2002-48-54.png)
+
 ## Documentation of API
 
 | Endpoint                                  | Method | Description                                                                           |
@@ -33,7 +38,25 @@
 
 ## Getting Started
 
-- Clone repo ini.
-- Masuk ke folder project, kemudian ketikkan `npm install` untuk menginstall semua dependencies yang diperlukan.
-- Setelah itu, ketik `npm run dev` untuk menjalankan project. Backend akan diserve di `http://localhost:5000` .
-- Jika ingin build project ini dengan Docker, silahkan pastikan Docker telah terinstall, dan ketik `docker compose up --build`.
+### A. Prerequisites
+
+- Node.js (Latest Version).
+- Docker.
+- PM2.
+- MySQL.
+
+### B. Process
+
+- Clone this repo.
+- Create a database named `taritme` in your environment.
+- Go to the project folder, navigate to `src/lib/utils` and you can find a file named `taritme.sql`. Import it to your environment with command `mysqldump -u <your_mysql_username> -p taritme < taritme.sql`
+- Go to the project folder, and type `npm install` to install all needed dependencies. 
+- Create a `.env` file. You can check the format in `.env.example` file.
+- After that, type `npm run dev` to run this project. See the result in the Browser => http://localhost:5000.
+- If you want to build this project in Docker Container, just type `docker compose up --build` in your terminal and see the result.
+
+## Note
+
+- This project are deployed in a VPS with Ubuntu 22.04 as the operating system, using Nginx as a Web Server, PM2 to run and automate Backend workflow, and Cloudflare for subdomain.
+- We use conventional commits as commit style and rules. If you want to know more about it, [read here](https://www.conventionalcommits.org/en/v1.0.0/).
+- For isolated build/deployment/testing, we use Docker. If you want to know more about it, [read here](https://www.docker.com/).
