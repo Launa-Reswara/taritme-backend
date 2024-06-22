@@ -269,63 +269,76 @@ export async function getDetailPelatihTari(req, res) {
 // Midtrans payment
 export async function transactionPelatihTari(req, res) {
   try {
-    const { pelatih_tari_name, customer_details, item_details } = req.body;
+    const authHeader = req.headers.authorization;
 
-    const { gross_amount, name, email, phone, city } = customer_details;
+    if (authHeader) {
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+      const email = decodedToken.email;
 
-    const firstName = name.split(" ")[0];
-    const lastName = name.split(" ").slice(1).join(" ");
+      const { pelatih_tari_name, customer_details, item_details } = req.body;
 
-    // Generate transaction id
-    const transaction_id = `TRM-ITEM-${nanoid(10)}`;
+      const { gross_amount, name, phone, city } = customer_details;
 
-    // Create midtrans snap
-    const snap = new midtransClient.Snap({
-      isProduction: false,
-      serverKey: MIDTRANS_SERVER_KEY,
-      clientKey: MIDTRANS_CLIENT_KEY,
-    });
+      const firstName = name.split(" ")[0];
+      const lastName = name.split(" ").slice(1).join(" ");
 
-    /**
-     * Parameter needed for transaction
-     * @see https://docs.midtrans.com/reference/request-body-json-parameter
-     */
-    const parameter = {
-      transaction_details: {
-        order_id: transaction_id,
-        gross_amount,
-      },
-      item_details,
-      credit_card: {
-        secure: true,
-      },
-      customer_details: {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        billing_adress: {
+      // Generate transaction id
+      const transaction_id = `TRM-ITEM-${nanoid(10)}`;
+
+      // Create midtrans snap
+      const snap = new midtransClient.Snap({
+        isProduction: false,
+        serverKey: MIDTRANS_SERVER_KEY,
+        clientKey: MIDTRANS_CLIENT_KEY,
+      });
+
+      /**
+       * Parameter needed for transaction
+       * @see https://docs.midtrans.com/reference/request-body-json-parameter
+       */
+      const parameter = {
+        transaction_details: {
+          order_id: transaction_id,
+          gross_amount,
+        },
+        item_details,
+        credit_card: {
+          secure: true,
+        },
+        customer_details: {
           first_name: firstName,
           last_name: lastName,
           email,
           phone,
-          city,
+          billing_adress: {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            phone,
+            city,
+          },
         },
-      },
-      callbacks: {
-        finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
-      },
-    };
+        callbacks: {
+          finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
+        },
+      };
 
-    // Init transaction
-    await snap.createTransaction(parameter).then((transaction) => {
-      res.status(200).json({
-        statusCode: 200,
-        message: "Success create transaction!",
-        token: transaction.token,
-        redirect_url: transaction.redirect_url,
+      // Init transaction
+      await snap.createTransaction(parameter).then((transaction) => {
+        res.status(200).json({
+          statusCode: 200,
+          message: "Success create transaction!",
+          token: transaction.token,
+          redirect_url: transaction.redirect_url,
+        });
       });
-    });
+    } else {
+      res.status(401).json({
+        statusCode: 401,
+        message: "Not authorized!",
+      });
+    }
   } catch (err) {
     res
       .status(400)
@@ -372,9 +385,6 @@ export async function getPaymentStatusPelatihTari(req, res) {
     const { order_id } = req.params;
 
     if (authHeader) {
-      const token = authHeader.split(" ")[1];
-      const decodedToken = decode(token);
-
       const response = await axios.get(
         `${MIDTRANS_API_URL}/v2/${order_id}/status`,
         {
