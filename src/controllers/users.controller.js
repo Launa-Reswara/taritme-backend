@@ -160,18 +160,11 @@ export async function getRiwayatKursus(req, res) {
         )
       );
 
-      if (results.length) {
-        res.status(200).json({
-          statusCode: 200,
-          message: "Success to get riwayat kursus!",
-          data: newArr,
-        });
-      } else {
-        res.status(404).json({
-          statusCode: 404,
-          message: "Riwayat kursus is not available!",
-        });
-      }
+      res.status(200).json({
+        statusCode: 200,
+        message: "Success to get riwayat kursus!",
+        data: newArr,
+      });
     } else {
       res.status(401).json({
         statusCode: 401,
