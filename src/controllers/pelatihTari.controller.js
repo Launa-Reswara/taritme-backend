@@ -5,7 +5,6 @@ import { uploadImage } from "../lib/utils/cloudinary.js";
 import {
   ADMIN_EMAIL,
   ADMIN_PASSWORD,
-  FRONTEND_PRODUCTION_URL,
   MIDTRANS_API_URL,
   MIDTRANS_CLIENT_KEY,
   MIDTRANS_SERVER_KEY,
@@ -319,9 +318,6 @@ export async function transactionPelatihTari(req, res) {
             city,
           },
         },
-        callbacks: {
-          finish: `${FRONTEND_PRODUCTION_URL}/temukan-pelatih/${pelatih_tari_name}/ikuti-kursus/penilaian`,
-        },
       };
 
       // Init transaction
@@ -330,7 +326,6 @@ export async function transactionPelatihTari(req, res) {
           statusCode: 200,
           message: "Success create transaction!",
           token: transaction.token,
-          redirect_url: transaction.redirect_url,
         });
       });
     } else {
