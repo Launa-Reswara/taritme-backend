@@ -146,7 +146,12 @@ export async function getRiwayatKursus(req, res) {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
-      const [results] = await pool.query(`SELECT * FROM riwayat_kursus`);
+      const token = authHeader.split(" ")[1];
+      const decodedToken = decode(token);
+
+      const [results] = await pool.query(
+        `SELECT * FROM riwayat_kursus WHERE email = '${decodedToken.email}'`
+      );
 
       const newArr = await Promise.all(
         results.map(async (item) =>
