@@ -1,6 +1,5 @@
 import { PORT } from "./src/lib/utils/constants.js";
 import logger from "./src/lib/utils/logger.js";
-import { specs } from "./src/lib/utils/swagger.js";
 import routes from "./src/routes/index.js";
 import bodyParser from "body-parser";
 import compression from "compression";
@@ -8,7 +7,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
-import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 const app = express();
@@ -42,13 +40,6 @@ async function main() {
 
   // routes
   app.use(routes);
-
-  // Swagger JS docs
-  app.use(
-    "/api/v1/docs",
-    swaggerUi.serve,
-    swaggerUi.setup(specs, { explorer: true })
-  );
 
   app.listen(PORT, () => {
     console.log(`Server sudah jalan di port ${PORT}`);
