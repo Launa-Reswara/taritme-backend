@@ -3,10 +3,13 @@
   <p>Backend side for Taritme</p>
 </div>
 
-
 ## Database Design
 
 ![database design](./public/docs/Screenshot%20from%202024-06-23%2002-48-54.png)
+
+## Contentful Model for Arsip Kesenian
+
+![contentful model](./public/docs//Screenshot%20from%202024-06-23%2011-11-00.png)
 
 ## Documentation of API
 
@@ -27,6 +30,7 @@
 | `/api/v1/users`                           | GET    | Get available users.                                                                  |
 | `/api/v1/pelatih-tari/edit/:id`           | PATCH  | Edit pelatih tari based on id.                                                        |
 | `/api/v1/users/profile/edit/:id`          | PATCH  | Edit users profile based on id                                                        |
+| `/api/v1/users/delete/:id`                | DELETE | Delete user based on id.                                                              |
 | `/api/v1/pelatih-tari/delete/:id`         | DELETE | Delete pelatih tari based on id.                                                      |
 
 ## Tech Stack
