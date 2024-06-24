@@ -1,6 +1,10 @@
 import { PORT } from "./src/lib/utils/constants.js";
 import logger from "./src/lib/utils/logger.js";
-import routes from "./src/routes/index.js";
+import authRoutes from "./src/routes/auth.route.js";
+import homeRoutes from "./src/routes/home.route.js";
+import komunitasRoutes from "./src/routes/komunitas.route.js";
+import pelatihTariRoutes from "./src/routes/pelatihTari.route.js";
+import usersRoutes from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
@@ -39,7 +43,11 @@ async function main() {
   app.use(compression());
 
   // routes
-  app.use(routes);
+  app.use(authRoutes);
+  app.use(homeRoutes);
+  app.use(komunitasRoutes);
+  app.use(pelatihTariRoutes);
+  app.use(usersRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server sudah jalan di port ${PORT}`);
