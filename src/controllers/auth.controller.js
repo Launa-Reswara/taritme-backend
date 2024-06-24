@@ -1,14 +1,7 @@
-import {
-  ADMIN_EMAIL,
-  ADMIN_PASSWORD,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  GOOGLE_REDIRECT_URI,
-} from "../lib/utils/constants.js";
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from "../lib/utils/constants.js";
 import { encode } from "../lib/utils/jwt.js";
 import { checkPassword, hashPassword } from "../lib/utils/password.js";
 import { pool } from "../lib/utils/pool.js";
-import nodemailer from "nodemailer";
 
 export async function loginUserAccount(req, res) {
   try {
